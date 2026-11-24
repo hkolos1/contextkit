@@ -22,6 +22,7 @@ import { download, report } from "./export";
   templateUrl: "workspace.html",
 })
 export class Workspace {
+  readonly version = chrome.runtime.getManifest().version;
   popup = document.body.classList.contains("popup");
   tabs = ["Tools", "Playground", "Activity", "Audit"];
   icons = ["wrench", "terminal", "activity", "shield-check"];

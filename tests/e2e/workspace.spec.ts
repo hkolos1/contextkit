@@ -9,6 +9,7 @@ async function workspace(native: boolean, grant = true) {
     join(root, "profile"),
     {
       channel: "chromium",
+      executablePath: process.env.CONTEXTKIT_CHROME,
       headless: true,
       viewport: { width: 440, height: 800 },
       args: [

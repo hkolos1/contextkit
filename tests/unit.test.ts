@@ -29,6 +29,20 @@ function fixture(native = true) {
 describe("native adapter", () => {
   it("distinguishes unsupported from an empty inventory", async () =>
     expect((await fixture(false).site.discover()).available).toBe(false));
+  it("handles a partial browser API without offering execution", async () => {
+    const doc = {
+      location: { origin: "https://example.test" },
+      modelContext: { executeTool: vi.fn() },
+    };
+    const site = adapter(doc as unknown as Document);
+    expect(await site.discover()).toMatchObject({
+      available: false,
+      executable: false,
+      tools: [],
+    });
+    await expect(site.invoke(tool, {}, true)).rejects.toThrow("unavailable");
+    expect(doc.modelContext.executeTool).not.toHaveBeenCalled();
+  });
   it("runs the original top-level handle only", async () => {
     const { site, handles, executeTool } = fixture();
     const snap = await site.discover();

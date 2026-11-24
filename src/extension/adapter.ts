@@ -19,7 +19,7 @@ export function adapter(doc: Document) {
   const api = (doc as unknown as { modelContext?: NativeContext }).modelContext;
   const origin = doc.location.origin;
   async function inventory() {
-    const all = (await api?.getTools?.()) ?? [];
+    const all = typeof api?.getTools === "function" ? await api.getTools() : [];
     const handles = all.filter(
       (h) => (h.source ?? h.window) === doc.defaultView,
     );
@@ -42,12 +42,17 @@ export function adapter(doc: Document) {
       return {
         origin,
         available: typeof api?.getTools === "function",
-        executable: typeof api?.executeTool === "function",
+        executable:
+          typeof api?.getTools === "function" &&
+          typeof api.executeTool === "function",
         tools: (await inventory()).tools,
       };
     },
     async invoke(expected: Tool, input: unknown, confirmed: boolean) {
-      if (!api?.executeTool || !api.getTools)
+      if (
+        typeof api?.executeTool !== "function" ||
+        typeof api.getTools !== "function"
+      )
         throw Error("Native WebMCP execution is unavailable.");
       const { handles, tools } = await inventory();
       const matches = tools.filter((t) => t.name === expected.name);

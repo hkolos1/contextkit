@@ -1,5 +1,5 @@
 import { adapter } from "./adapter";
-import { respond, type PageCommand, trustedUI } from "../core/bridge";
+import { respond, type PageCommand } from "../core/bridge";
 const scope = globalThis as typeof globalThis & { contextKitReady?: boolean };
 if (!scope.contextKitReady) {
   scope.contextKitReady = true;
@@ -14,7 +14,6 @@ if (!scope.contextKitReady) {
   chrome.runtime.onMessage.addListener((m: PageCommand, s, reply) => {
     if (
       s.id !== chrome.runtime.id ||
-      trustedUI(s, chrome.runtime.getURL("")) ||
       s.url !== chrome.runtime.getURL("background.js")
     )
       return;
