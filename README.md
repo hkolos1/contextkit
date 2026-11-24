@@ -1,14 +1,68 @@
-<img src="public/icons/logo.svg" alt="ContextKit logo" width="48" height="48">
+<p align="center">
+  <img src="public/icons/logo.svg" alt="ContextKit logo" width="88" height="88">
+</p>
 
-# ContextKit
+<h1 align="center">ContextKit</h1>
 
-Inspect, test and audit the WebMCP tools a website exposes, directly from a Chrome side panel. ContextKit runs locally and needs no account. An optional Agent tab can drive the tools with Gemini, ChatGPT or Claude using your own API key.
+<p align="center">
+  <b>DevTools for WebMCP.</b><br/>
+  See every tool a website hands to AI agents, run them by hand, audit them, or let Gemini, ChatGPT or Claude drive them, all from Chrome's side panel.
+</p>
 
-[![GitHub release](https://img.shields.io/github/v/release/hkolos1/contextkit)](https://github.com/hkolos1/contextkit/releases/latest)
-[![Build and tests](https://github.com/hkolos1/contextkit/actions/workflows/ci.yml/badge.svg)](https://github.com/hkolos1/contextkit/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+<p align="center">
+  <a href="https://github.com/hkolos1/contextkit/releases/latest"><img alt="GitHub release" src="https://img.shields.io/github/v/release/hkolos1/contextkit?style=for-the-badge&color=6d28d9"></a>
+  <a href="https://github.com/hkolos1/contextkit/actions/workflows/ci.yml"><img alt="Build and tests" src="https://img.shields.io/github/actions/workflow/status/hkolos1/contextkit/ci.yml?branch=main&style=for-the-badge&label=build"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge"></a>
+  <img alt="Chrome MV3" src="https://img.shields.io/badge/Chrome-MV3_side_panel-4285f4?style=for-the-badge&logo=googlechrome&logoColor=white">
+</p>
 
-**[Download the extension from GitHub Releases](https://github.com/hkolos1/contextkit/releases/latest)**
+<p align="center">
+  <a href="https://github.com/hkolos1/contextkit/releases/latest"><b>⬇️ Download the latest release</b></a>
+  ·
+  <a href="#install">Install in 60 seconds</a>
+  ·
+  <a href="PRIVACY.md">Privacy</a>
+</p>
+
+<p align="center">
+  <img src="docs/explorer.png" width="330" alt="Tool explorer listing tools registered by the local inventory demo">
+  &nbsp;
+  <img src="docs/popup.png" width="300" alt="Extension popup showing the origin, tool count, audit findings and tool preview">
+</p>
+
+## Why
+
+Websites are starting to register **WebMCP tools**: typed functions that AI agents call instead of clicking through the DOM. Great for agents, but invisible to you. Which tools does this page expose? Are the schemas any good? Is `delete_account` marked as destructive? What happens when you actually call it?
+
+ContextKit answers that in one click.
+
+- 🔎 **See everything.** Every registered tool with its schema, annotations and safety hints, searchable and exportable.
+- 🧪 **Poke at it.** Generated forms or raw JSON, validation before you run, results and timings after. State-changing calls ask first.
+- 🤖 **Let an agent loose (on a leash).** Type a task, pick Gemini, ChatGPT or Claude, bring your own key. Read-only calls run, everything else waits for your thumbs up.
+- 🛡️ **Audit it.** Spec issues, authoring tips and heuristics, exported as JSON or a standalone HTML report.
+- 🔒 **Stays on your machine.** No account, no backend, no telemetry, no host permissions. Without an API key it makes zero network requests.
+
+## How it works
+
+```mermaid
+flowchart LR
+    subgraph Chrome
+      P["Side panel<br/>(Angular 22)"] <--> W["MV3 service worker"]
+      W <--> C["Isolated content script"]
+      C <--> M["document.modelContext<br/>(the page's WebMCP tools)"]
+    end
+    P -. "Agent tab, your key only" .-> L["Gemini · OpenAI · Anthropic"]
+```
+
+Access is granted per tab with `activeTab` when you click the extension, so ContextKit never reads a site you did not open it on.
+
+## Built with
+
+<p>
+  <img src="https://skillicons.dev/icons?i=angular,ts,tailwind,nodejs,vitest&theme=light" alt="Angular, TypeScript, Tailwind CSS, Node.js, Vitest">
+</p>
+
+Angular 22 standalone components in a Manifest V3 extension, Tailwind CSS 4, esbuild, Vitest for unit tests, Playwright driving real Chrome for Testing for end-to-end tests, Biome for linting, and the official Anthropic SDK for Claude. Every release ZIP is built from an allowlist and tested in the browser before it is published.
 
 ## Install
 
@@ -32,9 +86,7 @@ Visit a WebMCP-enabled HTTPS or localhost page. Click **ContextKit** in Chrome's
 | Activity | Review observed inventory changes and calls initiated by ContextKit. Filter, clear or export the journal. |
 | Audit | Review specification issues, authoring recommendations and heuristics. Save a JSON report or standalone HTML report. |
 
-<img src="docs/explorer.png" width="350" alt="Tool explorer listing tools registered by the local inventory demo"> <img src="docs/popup.png" width="290" alt="Extension popup showing the origin, tool count, audit findings and tool preview">
-
-Both screenshots show the built extension inspecting the included native WebMCP demo.
+The screenshots above show the built extension inspecting the included native WebMCP demo.
 
 ## Browser requirements and limits
 
