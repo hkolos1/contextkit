@@ -266,3 +266,61 @@ test("drops the inventory when switching tabs and rejects stale document executi
     await w.close();
   }
 });
+
+test("dropdown menus follow the panel theme and support keyboard selection", async () => {
+  const w = await workspace(true);
+  try {
+    const { panel } = w;
+    await expect(panel.getByText("WebMCP available")).toBeVisible();
+    const inventory = await panel.evaluate(async () => {
+      const { id: windowId } = await chrome.windows.getCurrent();
+      const reply = await chrome.runtime.sendMessage({
+        kind: "inspect",
+        windowId,
+      });
+      return reply.value.tools;
+    });
+    await panel.locator("input[type=file]").setInputFiles({
+      name: "inventory.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(JSON.stringify(inventory)),
+    });
+    await expect(panel.getByText("Offline file")).toBeVisible();
+    await panel.bringToFront();
+    await panel.setViewportSize({ width: 320, height: 640 });
+    const filter = panel.getByLabel("Safety classification");
+    for (const theme of ["light", "dark"] as const) {
+      await panel.emulateMedia({ colorScheme: theme });
+      await filter.click();
+      await expect
+        .poll(() => filter.evaluate((el) => el.matches(":open")))
+        .toBe(true);
+      expect(
+        await filter.evaluate(
+          (el) => getComputedStyle(el, "::picker(select)").backgroundColor,
+        ),
+      ).toBe(theme === "light" ? "rgb(255, 255, 255)" : "rgb(17, 20, 29)");
+      await panel.keyboard.press("Escape");
+    }
+    await filter.focus();
+    await panel.keyboard.press("Space");
+    await expect
+      .poll(() => filter.evaluate((el) => el.matches(":open")))
+      .toBe(true);
+    await panel.keyboard.press("End");
+    await panel.keyboard.press("Enter");
+    await expect(filter).toHaveValue("Unclassified");
+    await panel
+      .getByRole("button", { name: "Playground", exact: true })
+      .click();
+    const selected = panel.getByLabel("Selected tool");
+    await selected.click();
+    await expect(
+      selected.getByRole("option", { name: "get_item_details" }),
+    ).toBeVisible();
+    await selected.getByRole("option", { name: "get_item_details" }).click();
+    await expect(panel.getByLabel("id", { exact: true })).toBeVisible();
+  } finally {
+    await w.close();
+  }
+});

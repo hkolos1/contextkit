@@ -476,3 +476,69 @@ dialog::backdrop {
 dialog pre {
   max-height: 25vh;
 }
+
+@supports (appearance: base-select) {
+  select,
+  select::picker(select) {
+    appearance: base-select;
+  }
+  select,
+  .eyebrow select,
+  .field select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    max-width: 100%;
+    cursor: pointer;
+  }
+  .filters select {
+    flex: 0 0 auto;
+    max-width: 48%;
+  }
+  select::picker-icon {
+    color: var(--muted);
+    font-size: 10px;
+  }
+  select::picker(select) {
+    box-sizing: border-box;
+    min-inline-size: anchor-size(width);
+    max-inline-size: calc(100vw - 16px);
+    max-block-size: min(18rem, 50vh);
+    overflow: auto;
+    margin-block: 4px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 18%);
+    font: inherit;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  select option {
+    min-height: 30px;
+    padding: 5px 8px;
+    gap: 7px;
+    border-radius: 3px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+  select option:checked {
+    background: var(--raised);
+    color: var(--blue);
+  }
+  select option:hover,
+  select option:focus-visible {
+    background: var(--raised);
+    outline: 1px solid var(--blue);
+    outline-offset: -1px;
+  }
+  select option::checkmark {
+    order: 1;
+    margin-inline-start: auto;
+    color: var(--blue);
+  }
+}
