@@ -3,10 +3,15 @@ import { execFileSync } from "node:child_process";
 import { transformAsync } from "@babel/core";
 import linker from "@angular/compiler-cli/linker/babel";
 import { build } from "esbuild";
+import { dirname } from "node:path";
+import { staticAssets } from "./assets.mjs";
 const dev = process.argv.includes("--dev");
 await rm(".build", { recursive: true, force: true });
 await rm("dist", { recursive: true, force: true });
-await cp("public", "dist", { recursive: true });
+for (const [dest, source] of staticAssets) {
+  await mkdir(dirname(`dist/${dest}`), { recursive: true });
+  await cp(source, `dist/${dest}`);
+}
 execFileSync("node_modules/.bin/ngc", [], { stdio: "inherit" });
 const options = {
   plugins: [
@@ -49,47 +54,8 @@ execFileSync(
   ["-i", "src/ui/styles.css", "-o", "dist/style.css", "--minify"],
   { stdio: "inherit" },
 );
-await mkdir("dist/icons", { recursive: true });
-for (const icon of [
-  "wrench",
-  "play",
-  "activity",
-  "shield-check",
-  "settings-2",
-  "refresh-cw",
-  "globe",
-  "search",
-  "panel-right-open",
-  "layers",
-  "chevron-right",
-  "download",
-  "upload",
-  "terminal",
-  "copy",
-  "circle-help",
-]) {
-  await cp(
-    `node_modules/lucide-static/icons/${icon}.svg`,
-    `dist/icons/${icon}.svg`,
-  );
-}
-await cp("node_modules/lucide-static/LICENSE", "dist/icons/LUCIDE-LICENSE");
 for (const name of ["popup", "panel"])
   await writeFile(
     `dist/${name}.html`,
     (await readFile("src/ui/index.html", "utf8")).replace("WORKSPACE", name),
   );
-
-await cp("LICENSE", "dist/LICENSE");
-await mkdir("dist/licenses", { recursive: true });
-for (const [name, file] of [
-  ["@angular/core", "LICENSE"],
-  ["rxjs", "LICENSE.txt"],
-  ["tslib", "LICENSE.txt"],
-  ["tailwindcss", "LICENSE"],
-]) {
-  await cp(
-    `node_modules/${name}/${file}`,
-    `dist/licenses/${name.split("/").at(-1)}.txt`,
-  );
-}

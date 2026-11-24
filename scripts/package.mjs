@@ -1,12 +1,23 @@
-import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
-import { relative, join, sep } from "node:path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { zipSync } from "fflate";
-const files = {};
-for (const path of (
-  await readdir("dist", { recursive: true, withFileTypes: true })
-).filter((p) => p.isFile())) {
-  const name = join(path.parentPath, path.name);
-  files[relative("dist", name).split(sep).join("/")] = await readFile(name);
+import { releaseFiles } from "./assets.mjs";
+
+const { version } = JSON.parse(await readFile("package.json", "utf8"));
+const manifest = JSON.parse(await readFile("dist/manifest.json", "utf8"));
+const tag = `v${version}`;
+if (
+  manifest.version !== version ||
+  (process.env.GITHUB_REF_TYPE === "tag" && process.env.GITHUB_REF_NAME !== tag)
+) {
+  throw Error(`Package, manifest and release tag must agree on ${tag}.`);
 }
+
+const files = {};
+for (const file of releaseFiles) files[file] = await readFile(`dist/${file}`);
+const archive = `release/contextkit-${tag}.zip`;
 await mkdir("release", { recursive: true });
-await writeFile("release/contextkit-1.0.0.zip", zipSync(files));
+await writeFile(
+  archive,
+  zipSync(files, { level: 9, mtime: new Date(2020, 0, 1) }),
+);
+console.log(`Packaged ${releaseFiles.length} files in ${archive}`);

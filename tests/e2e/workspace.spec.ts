@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 async function workspace(native: boolean, grant = true) {
   const root = await mkdtemp(join(tmpdir(), "contextkit-e2e-")),
-    ext = resolve("dist");
+    ext = resolve(process.env.CONTEXTKIT_EXTENSION_DIR ?? "dist");
   const context = await chromium.launchPersistentContext(
     join(root, "profile"),
     {
@@ -149,6 +149,10 @@ test("unsupported browser, offline inventory, audit export and preferences", asy
     await panel.getByRole("button", { name: "HTML", exact: true }).click();
     expect((await download).suggestedFilename()).toBe("contextkit-audit.html");
     await panel.getByRole("button", { name: "Settings", exact: true }).click();
+    const version = await panel.evaluate(
+      () => chrome.runtime.getManifest().version,
+    );
+    await expect(panel.getByText(`ContextKit v${version}`)).toBeVisible();
     await panel.getByLabel("Appearance").selectOption("dark");
     await expect(panel.locator("html")).toHaveAttribute("data-theme", "dark");
     await panel.getByLabel("Keep activity").check();
