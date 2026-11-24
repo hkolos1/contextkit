@@ -6,7 +6,7 @@ export interface NativeContext extends EventTarget {
  executeTool?:(handle:NativeTool,input:Dict)=>Promise<unknown>;
 }
 export function adapter(doc:Document){
- const api=(doc as Document & {modelContext?:NativeContext}).modelContext;
+ const api=(doc as unknown as {modelContext?:NativeContext}).modelContext;
  const origin=doc.location.origin;
  async function inventory(){
   const all=await api?.getTools?.()??[];
