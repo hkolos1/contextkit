@@ -56,7 +56,7 @@ Access is granted per tab with `activeTab` when you click the extension, so Cont
 ## Built with
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=angular,ts,tailwind,nodejs,vitest&theme=dark">
+  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=angular%2Cts%2Ctailwind%2Cnodejs%2Cvitest&theme=dark">
   <img src="https://skillicons.dev/icons?i=angular,ts,tailwind,nodejs,vitest&theme=light" alt="Angular, TypeScript, Tailwind CSS, Node.js, Vitest">
 </picture>
 
