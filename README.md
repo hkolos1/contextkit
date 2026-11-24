@@ -55,9 +55,10 @@ Access is granted per tab with `activeTab` when you click the extension, so Cont
 
 ## Built with
 
-<p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://skillicons.dev/icons?i=angular,ts,tailwind,nodejs,vitest&theme=dark">
   <img src="https://skillicons.dev/icons?i=angular,ts,tailwind,nodejs,vitest&theme=light" alt="Angular, TypeScript, Tailwind CSS, Node.js, Vitest">
-</p>
+</picture>
 
 Angular 22 standalone components in a Manifest V3 extension, Tailwind CSS 4, esbuild, Vitest for unit tests, Playwright driving real Chrome for Testing for end-to-end tests, Biome for linting, and the official Anthropic SDK for Claude. Every release ZIP is built from an allowlist and tested in the browser before it is published.
 
