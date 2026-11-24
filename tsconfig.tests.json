@@ -3,13 +3,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "noEmit": true,
-    "types": [
-      "node",
-      "chrome"
-    ]
+    "types": ["node", "chrome"]
   },
-  "include": [
-    "tests/**/*.ts",
-    "playwright.config.ts"
-  ]
+  "include": ["tests/**/*.ts", "playwright.config.ts"]
 }

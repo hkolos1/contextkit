@@ -1,0 +1,19 @@
+<div class="heading"><h1>Tool preview</h1></div>
+@for (t of tools().slice(0, 3); track $index) {
+  <div class="preview">
+    <code>{{ t.name }}</code
+    ><small>{{ safety(t) }}</small>
+  </div>
+} @empty {
+  <p class="empty">
+    {{ loading() ? "Inspecting website…" : "No tools to preview." }}
+  </p>
+}
+<button
+  type="button"
+  class="primary full"
+  (click)="open.emit()"
+  [disabled]="!ready()"
+>
+  <i style="--icon: url(icons/panel-right-open.svg)"></i>Open Side Panel
+</button>

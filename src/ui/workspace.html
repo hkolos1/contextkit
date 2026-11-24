@@ -1,34 +1,414 @@
-<header><div class="brand"><img src="icons/logo.svg" width="30" height="30" alt=""><b>ContextKit</b></div><div class="actions"><button class="icon" title="Refresh active tab" aria-label="Refresh active tab" (click)="refresh()"><i style="--icon:url(icons/refresh-cw.svg)"></i></button><button class="icon" title="Settings" aria-label="Settings" [attr.aria-expanded]="settings()" (click)="settings.set(!settings())"><i style="--icon:url(icons/settings-2.svg)"></i></button></div></header>
-@if(settings()){<section class="settings"><h2>Settings</h2><label>Appearance <select [value]="theme()" (change)="setTheme($any($event.target).value)"><option value="system">System</option><option value="dark">Dark</option><option value="light">Light</option></select></label><label><input type="checkbox" [checked]="persistent()" (change)="persist($any($event.target).checked)"> Keep activity after Chrome closes</label><small>Saved activity includes arguments and responses.</small></section>}
-<section class="context"><div class="line"><span class="eyebrow">{{offline()!==null?'Imported inventory':'Website context'}}</span><span class="status" [class.good]="snap()?.available"><span class="dot"></span>{{state()}}</span></div><div class="origin"><i style="--icon:url(icons/globe.svg)"></i><strong>{{origin()}}</strong></div><div class="stats"><span><b>{{tools().length}}</b> tools</span><span><b>{{findings().length}}</b> audit findings</span></div></section>
-@if(!popup){<nav aria-label="Workspace">@for(tab of tabs;track tab;let idx=$index){<button [attr.aria-current]="section()===tab?'page':null" (click)="section.set(tab)"><i [style.--icon]="'url(icons/'+icons[idx]+'.svg)'"></i>{{tab}}</button>}</nav>}
-<main>
-@if(notice()){<p class="message" role="status">{{notice()}} <button (click)="notice.set('')" aria-label="Dismiss message">×</button></p>}
-@if(problem()){<p class="message warning" role="status">{{problem()}}</p>}
-@if(!loading()&&!problem()&&offline()===null&&!snap()?.available){<aside class="message"><b>WebMCP inspection unavailable</b><p>Use a secure page in a compatible Chrome build. Enable <code>chrome://flags/#enable-webmcp-testing</code> and relaunch Chrome.</p></aside>}
-@if(popup){<div class="heading"><h1>Tool preview</h1></div>@for(t of tools().slice(0,3);track $index){<div class="preview"><code>{{t.name}}</code><small>{{safety(t)}}</small></div>}@empty{<p class="empty">{{loading()?'Inspecting website…':'No tools to preview.'}}</p>}<button class="primary full" (click)="openPanel()" [disabled]="windowId<0"><i style="--icon:url(icons/panel-right-open.svg)"></i>Open Side Panel</button>}
-@else {
-@switch(section()){
-@case ('Tools'){
-<div class="heading"><div class="line"><h1>Tool explorer</h1><span class="count">{{tools().length}}</span></div><div class="actions"><button class="icon" aria-label="Import definitions" title="Import definitions" (click)="file.click()"><i style="--icon:url(icons/upload.svg)"></i></button><button class="icon" [disabled]="!tools().length" title="Export definitions" aria-label="Export definitions" (click)="exportTools()"><i style="--icon:url(icons/download.svg)"></i></button></div></div>
-<input #file hidden type="file" accept=".json,application/json" (change)="importFile(file)">
-<div class="filters"><label class="search"><i style="--icon:url(icons/search.svg)"></i><input type="search" placeholder="Search tools…" aria-label="Search tools" [value]="search()" (input)="search.set($any($event.target).value)"></label><select aria-label="Safety classification" [value]="filter()" (change)="filter.set($any($event.target).value)">@for(f of ['All','Read-only','Destructive','Consequential','Unclassified'];track f){<option>{{f}}</option>}</select></div>
-<div class="inventory">@for(t of filtered();track $index){<details><summary><div class="line"><code>{{t.name}}</code><span class="tag" [class.safe]="safety(t)==='Read-only'">{{safety(t)}}</span></div><p>{{t.description||'Description missing'}}</p></summary><div class="detail"><small>{{t.origin||'Origin unspecified'}} · {{t.registration||'Registration type unavailable'}}</small><pre>{{pretty(t)}}</pre><div class="actions"><button (click)="copy(t)">Copy JSON</button><button (click)="selectTool(t)">Open playground</button></div></div></details>}@empty{<p class="empty">{{loading()?'Discovering tools…':tools().length?'No tools match these filters.':'No registered tools in this inventory.'}}</p>}</div>
-@if(offline()!==null){<button (click)="refresh()">Return to active tab</button>}
+<header>
+  <div class="brand">
+    <img src="icons/logo.svg" width="30" height="30" alt="" /><b>ContextKit</b>
+  </div>
+  <div class="actions">
+    <button
+      type="button"
+      class="icon"
+      title="Refresh active tab"
+      aria-label="Refresh active tab"
+      (click)="refresh()"
+    >
+      <i style="--icon: url(icons/refresh-cw.svg)"></i></button
+    ><button
+      type="button"
+      class="icon"
+      title="Settings"
+      aria-label="Settings"
+      [attr.aria-expanded]="settings()"
+      (click)="settings.set(!settings())"
+    >
+      <i style="--icon: url(icons/settings-2.svg)"></i>
+    </button>
+  </div>
+</header>
+@if (settings()) {
+  <section class="settings">
+    <h2>Settings</h2>
+    <label
+      >Appearance
+      <select [value]="theme()" (change)="setTheme($any($event.target).value)">
+        <option value="system">System</option>
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+      </select></label
+    ><label
+      ><input
+        type="checkbox"
+        [checked]="persistent()"
+        (change)="persist($any($event.target).checked)"
+      />
+      Keep activity after Chrome closes</label
+    ><small>Saved activity includes arguments and responses.</small>
+  </section>
 }
-@case ('Playground'){<div class="heading"><h1>Tool playground</h1></div>
-@if(tool();as t){<label class="eyebrow">Selected tool<select [value]="chosen()" (change)="select(+$any($event.target).value)">@for(x of tools();track $index){<option [value]="$index">{{x.name}}</option>}</select></label><p class="muted">{{t.description}}</p>
-<div class="heading"><h2>Arguments</h2><div class="switch">@for(m of ['Form','JSON'];track m){<button [attr.aria-pressed]="mode()===m" (click)="mode.set(m)">{{m}}</button>}</div></div>
-@if(mode()==='JSON'){<textarea aria-label="JSON arguments" spellcheck="false" [value]="raw()" (input)="raw.set($any($event.target).value)"></textarea>}@else{<ck-field [schema]="schema()" [value]="parsed().v" (changed)="raw.set(pretty($event))"/>}
-@if(parsed().errors.length){<p class="warning" role="status">{{parsed().errors.slice(0,3).join(' ')}}</p>}
-<div class="actions run"><button class="primary" [disabled]="busy()||!!parsed().errors.length||!snap()?.executable" (click)="run()"><i style="--icon:url(icons/play.svg)"></i>{{busy()?'Running…':'Run tool'}}</button><button (click)="copy(parsed().v)" [disabled]="parsed().v===null">Copy request</button></div>
-@if(offline()!==null){<p class="muted">Offline inspection · execution unavailable.</p>}
-@if(result();as r){<section class="response" aria-live="polite"><div class="heading"><h2>{{r.kind}} · {{r.duration}} ms</h2><button (click)="copy(r.response)">Copy response</button></div><small>{{r.time}}</small><pre>{{pretty(r.response)}}</pre></section>}
-}@else{<p class="empty">Discover or import a tool to inspect its arguments.</p>}}
-@case ('Activity'){<div class="heading"><h1>Activity</h1><div class="actions"><button [disabled]="!history().length" (click)="download('activity.json',history())">Export</button><button [disabled]="!history().length" (click)="clear()">Clear</button></div></div><label>Event type <select [value]="activityFilter()" (change)="activityFilter.set($any($event.target).value)">@for(f of ['All','Discovery','Success','Error'];track f){<option>{{f}}</option>}</select></label><p class="muted">Local discovery changes and ContextKit executions.</p>
-@for(e of events();track $index){<details><summary><small>{{e.kind}} · {{e.time}} @if(e.duration!==undefined){ · {{e.duration}} ms}</small><p><code>{{e.name}}</code></p></summary><pre>{{pretty(e)}}</pre></details>}@empty{<p class="empty">No matching activity.</p>}}
-@case ('Audit'){<div class="heading"><h1>WebMCP audit</h1><div class="actions"><button (click)="exportAudit(false)">JSON</button><button (click)="exportAudit(true)">HTML</button></div></div>
-<p class="muted">Heuristic findings identify metadata for human review.</p>
-@for(f of findings();track $index){<article><div class="line"><span class="tag" [class.warning]="f.severity==='Warning'" [class.error]="f.severity==='Error'">{{f.severity}}</span><small>{{f.category}}</small></div><code>{{f.tool}}</code><h3>{{f.explanation}}</h3><p>{{f.remediation}}</p></article>}@empty{<p class="empty">{{tools().length?'No findings from the available checks.':'No tool definitions to audit.'}}</p>}}
-}}
+<section class="context">
+  <div class="line">
+    <span class="eyebrow">{{
+      offline() !== null ? "Imported inventory" : "Website context"
+    }}</span
+    ><span class="status" [class.good]="snap()?.available"
+      ><span class="dot"></span>{{ state() }}</span
+    >
+  </div>
+  <div class="origin">
+    <i style="--icon: url(icons/globe.svg)"></i><strong>{{ origin() }}</strong>
+  </div>
+  <div class="stats">
+    <span
+      ><b>{{ tools().length }}</b> tools</span
+    ><span
+      ><b>{{ findings().length }}</b> audit findings</span
+    >
+  </div>
+</section>
+@if (!popup) {
+  <nav aria-label="Workspace">
+    @for (tab of tabs; track tab; let idx = $index) {
+      <button
+        type="button"
+        [attr.aria-current]="section() === tab ? 'page' : null"
+        (click)="section.set(tab)"
+      >
+        <i [style.--icon]="'url(icons/' + icons[idx] + '.svg)'"></i>{{ tab }}
+      </button>
+    }
+  </nav>
+}
+<main>
+  @if (notice()) {
+    <p class="message" role="status">
+      {{ notice() }}
+      <button
+        type="button"
+        (click)="notice.set('')"
+        aria-label="Dismiss message"
+      >
+        ×
+      </button>
+    </p>
+  }
+  @if (problem()) {
+    <p class="message warning" role="status">{{ problem() }}</p>
+  }
+  @if (!loading() && !problem() && offline() === null && !snap()?.available) {
+    <aside class="message">
+      <b>WebMCP inspection unavailable</b>
+      <p>
+        Use a secure page in a compatible Chrome build. Enable
+        <code>chrome://flags/#enable-webmcp-testing</code> and relaunch Chrome.
+      </p>
+    </aside>
+  }
+  @if (popup) {
+    <ck-popup
+      [tools]="tools()"
+      [loading]="loading()"
+      [ready]="windowId >= 0"
+      (open)="openPanel()"
+    />
+  } @else {
+    @switch (section()) {
+      @case ("Tools") {
+        <div class="heading">
+          <div class="line">
+            <h1>Tool explorer</h1>
+            <span class="count">{{ tools().length }}</span>
+          </div>
+          <div class="actions">
+            <button
+              type="button"
+              class="icon"
+              aria-label="Import definitions"
+              title="Import definitions"
+              (click)="file.click()"
+            >
+              <i style="--icon: url(icons/upload.svg)"></i></button
+            ><button
+              type="button"
+              class="icon"
+              [disabled]="!tools().length"
+              title="Export definitions"
+              aria-label="Export definitions"
+              (click)="exportTools()"
+            >
+              <i style="--icon: url(icons/download.svg)"></i>
+            </button>
+          </div>
+        </div>
+        <input
+          #file
+          hidden
+          type="file"
+          accept=".json,application/json"
+          (change)="importFile(file)"
+        />
+        <div class="filters">
+          <label class="search"
+            ><i style="--icon: url(icons/search.svg)"></i
+            ><input
+              type="search"
+              placeholder="Search tools…"
+              aria-label="Search tools"
+              [value]="search()"
+              (input)="search.set($any($event.target).value)" /></label
+          ><select
+            aria-label="Safety classification"
+            [value]="filter()"
+            (change)="filter.set($any($event.target).value)"
+          >
+            @for (
+              f of [
+                "All",
+                "Read-only",
+                "Destructive",
+                "Consequential",
+                "Unclassified",
+              ];
+              track f
+            ) {
+              <option>{{ f }}</option>
+            }
+          </select>
+        </div>
+        <div class="inventory">
+          @for (t of filtered(); track $index) {
+            <details>
+              <summary>
+                <div class="line">
+                  <code>{{ t.name }}</code
+                  ><span class="tag" [class.safe]="safety(t) === 'Read-only'">{{
+                    safety(t)
+                  }}</span>
+                </div>
+                <p>{{ t.description || "Description missing" }}</p>
+              </summary>
+              <div class="detail">
+                <small
+                  >{{ t.origin || "Origin unspecified" }} ·
+                  {{ t.registration || "Registration type unavailable" }}</small
+                >
+                <pre>{{ pretty(t) }}</pre>
+                <div class="actions">
+                  <button type="button" (click)="copy(t)">Copy JSON</button
+                  ><button type="button" (click)="selectTool(t)">
+                    Open playground
+                  </button>
+                </div>
+              </div>
+            </details>
+          } @empty {
+            <p class="empty">
+              {{
+                loading()
+                  ? "Discovering tools…"
+                  : tools().length
+                    ? "No tools match these filters."
+                    : "No registered tools in this inventory."
+              }}
+            </p>
+          }
+        </div>
+        @if (offline() !== null) {
+          <button type="button" (click)="refresh()">
+            Return to active tab
+          </button>
+        }
+      }
+      @case ("Playground") {
+        <div class="heading"><h1>Tool playground</h1></div>
+        @if (tool(); as t) {
+          <label class="eyebrow"
+            >Selected tool<select
+              [value]="chosen()"
+              (change)="select(+$any($event.target).value)"
+            >
+              @for (x of tools(); track $index) {
+                <option [value]="$index">{{ x.name }}</option>
+              }
+            </select></label
+          >
+          <p class="muted">{{ t.description }}</p>
+          <div class="heading">
+            <h2>Arguments</h2>
+            <div class="switch">
+              @for (m of ["Form", "JSON"]; track m) {
+                <button
+                  type="button"
+                  [attr.aria-pressed]="mode() === m"
+                  (click)="mode.set(m)"
+                >
+                  {{ m }}
+                </button>
+              }
+            </div>
+          </div>
+          @if (mode() === "JSON") {
+            <textarea
+              maxlength="48000"
+              aria-label="JSON arguments"
+              spellcheck="false"
+              [value]="raw()"
+              (input)="raw.set($any($event.target).value)"
+            ></textarea>
+          } @else {
+            <ck-field
+              [schema]="schema()"
+              [value]="parsed().v"
+              (changed)="raw.set(pretty($event))"
+            />
+          }
+          @if (parsed().errors.length) {
+            <p class="warning" role="status">
+              {{ parsed().errors.slice(0, 3).join(" ") }}
+            </p>
+          }
+          <dialog
+            #confirmation
+            aria-labelledby="confirm-title"
+            (cancel)="dismiss()"
+          >
+            <h2 id="confirm-title">Confirm execution</h2>
+            <p>
+              Run <code>{{ t.name }}</code> on <code>{{ origin() }}</code>?
+            </p>
+            <p class="muted">
+              {{ safety(t) }} tool. This action may change website data.
+            </p>
+            <pre>{{ raw() }}</pre>
+            <div class="actions">
+              <button type="button" autofocus (click)="dismiss()">Cancel</button
+              ><button type="button" class="primary" (click)="confirmRun()">
+                Confirm and run
+              </button>
+            </div>
+          </dialog>
+          <div class="actions run">
+            <button
+              type="button"
+              class="primary"
+              [disabled]="
+                busy() || !!parsed().errors.length || !snap()?.executable
+              "
+              (click)="prepare(confirmation)"
+            >
+              <i style="--icon: url(icons/play.svg)"></i
+              >{{ busy() ? "Running…" : "Run tool" }}</button
+            ><button
+              type="button"
+              (click)="copy(parsed().v)"
+              [disabled]="parsed().v === null"
+            >
+              Copy request
+            </button>
+          </div>
+          @if (offline() !== null) {
+            <p class="muted">Offline inspection · execution unavailable.</p>
+          }
+          @if (result(); as r) {
+            <section class="response" aria-live="polite">
+              <div class="heading">
+                <h2>{{ r.kind }} · {{ r.duration }} ms</h2>
+                <button type="button" (click)="copy(r.response)">
+                  Copy response
+                </button>
+              </div>
+              <small>{{ r.time }}</small>
+              <pre>{{ pretty(r.response) }}</pre>
+            </section>
+          }
+        } @else {
+          <p class="empty">
+            Discover or import a tool to inspect its arguments.
+          </p>
+        }
+      }
+      @case ("Activity") {
+        <div class="heading">
+          <h1>Activity</h1>
+          <div class="actions">
+            <button
+              type="button"
+              [disabled]="!history().length"
+              (click)="download('activity.json', history())"
+            >
+              Export</button
+            ><button
+              type="button"
+              [disabled]="!history().length"
+              (click)="clear()"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+        <label
+          >Event type
+          <select
+            [value]="activityFilter()"
+            (change)="activityFilter.set($any($event.target).value)"
+          >
+            @for (f of ["All", "Discovery", "Success", "Error"]; track f) {
+              <option>{{ f }}</option>
+            }
+          </select></label
+        >
+        <p class="muted">Local discovery changes and ContextKit executions.</p>
+        @for (e of events(); track $index) {
+          <details>
+            <summary>
+              <small
+                >{{ e.kind }} · {{ e.time }}
+                @if (e.duration !== undefined) {
+                  · {{ e.duration }} ms
+                }
+              </small>
+              <p>
+                <code>{{ e.name }}</code>
+              </p>
+            </summary>
+            <pre>{{ pretty(e) }}</pre>
+          </details>
+        } @empty {
+          <p class="empty">No matching activity.</p>
+        }
+      }
+      @case ("Audit") {
+        <div class="heading">
+          <h1>WebMCP audit</h1>
+          <div class="actions">
+            <button type="button" (click)="exportAudit(false)">JSON</button
+            ><button type="button" (click)="exportAudit(true)">HTML</button>
+          </div>
+        </div>
+        <p class="muted">
+          Heuristic findings identify metadata for human review.
+        </p>
+        @for (f of findings(); track $index) {
+          <article>
+            <div class="line">
+              <span
+                class="tag"
+                [class.warning]="f.severity === 'Warning'"
+                [class.error]="f.severity === 'Error'"
+                >{{ f.severity }}</span
+              ><small>{{ f.category }}</small>
+            </div>
+            <code>{{ f.tool }}</code>
+            <h3>{{ f.explanation }}</h3>
+            <p>{{ f.remediation }}</p>
+          </article>
+        } @empty {
+          <p class="empty">
+            {{
+              tools().length
+                ? "No findings from the available checks."
+                : "No tool definitions to audit."
+            }}
+          </p>
+        }
+      }
+    }
+  }
 </main>

@@ -1,0 +1,15 @@
+{
+  "css": { "parser": { "tailwindDirectives": true } },
+  "formatter": { "indentStyle": "space", "indentWidth": 2 },
+  "overrides": [
+    {
+      "includes": ["src/ui/styles.css"],
+      "linter": {
+        "rules": {
+          "correctness": { "noUnknownMediaFeatureName": "off" },
+          "style": { "noDescendingSpecificity": "off" }
+        }
+      }
+    }
+  ]
+}

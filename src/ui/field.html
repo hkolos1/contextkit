@@ -1,0 +1,87 @@
+@if (choices().length) {
+  <select
+    [attr.aria-label]="label()"
+    (change)="changed.emit(choices()[+$any($event.target).value])"
+  >
+    @for (v of choices(); track $index) {
+      <option [value]="$index" [selected]="pretty(v) === pretty(value())">
+        {{ pretty(v) }}
+      </option>
+    }
+  </select>
+} @else {
+  @switch (type()) {
+    @case ("object") {
+      @for (pair of fields(); track pair[0]) {
+        <div class="field">
+          <div class="line">
+            <strong>{{ pair[0] }}</strong
+            ><small>{{ required(pair[0]) ? "required" : "optional" }}</small>
+            @if (!required(pair[0])) {
+              <button
+                type="button"
+                (click)="toggle(pair)"
+                [attr.aria-label]="
+                  (has(pair[0]) ? 'Remove ' : 'Include ') + pair[0]
+                "
+              >
+                {{ has(pair[0]) ? "Remove" : "Include" }}
+              </button>
+            }
+          </div>
+          @if (has(pair[0]) || required(pair[0])) {
+            <small>{{ description(pair[1]) }}</small><ck-field
+              [schema]="pair[1]"
+              [label]="pair[0]"
+              [value]="record()[pair[0]]"
+              (changed)="put(pair[0], $event)"
+            />
+          }
+        </div>
+      }
+      @if (!fields().length) {
+        <p class="muted">
+          No named fields. Use JSON to enter additional arguments.
+        </p>
+      }
+    }
+    @case ("array") {
+      @for (item of list(); track $index; let i = $index) {
+        <div class="field">
+          <div class="line">
+            <strong>Item {{ i + 1 }}</strong
+            ><button type="button" (click)="remove(i)">Remove</button>
+          </div>
+          <ck-field
+            [schema]="definition()['items']"
+            [value]="item"
+            [label]="label() + ' item ' + (i + 1)"
+            (changed)="replace(i, $event)"
+          />
+        </div>
+      }
+      <button type="button" (click)="add()">Add item</button>
+    }
+    @case ("boolean") {
+      <label
+        ><input
+          type="checkbox"
+          [checked]="value() === true"
+          (change)="changed.emit($any($event.target).checked)"
+        />
+        {{ label() }}</label
+      >
+    }
+    @case ("null") {
+      <code>null</code>
+    }
+    @default {
+      <input
+        [attr.aria-label]="label()"
+        [type]="numeric() ? 'number' : 'text'"
+        [value]="value() ?? ''"
+        (input)="edit($any($event.target))"
+      />
+    }
+  }
+}
