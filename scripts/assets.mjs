@@ -1,14 +1,18 @@
 // Only these static resources ship alongside the compiled extension entry points.
 const icons = [
   "activity",
+  "bot",
   "download",
   "globe",
   "panel-right-open",
   "play",
   "refresh-cw",
   "search",
+  "send",
   "settings-2",
   "shield-check",
+  "square",
+  "square-pen",
   "terminal",
   "upload",
   "wrench",
@@ -30,6 +34,7 @@ export const staticAssets = new Map([
   ["licenses/rxjs.txt", "node_modules/rxjs/LICENSE.txt"],
   ["licenses/tslib.txt", "node_modules/tslib/LICENSE.txt"],
   ["licenses/tailwindcss.txt", "node_modules/tailwindcss/LICENSE"],
+  ["licenses/anthropic-sdk.txt", "node_modules/@anthropic-ai/sdk/LICENSE"],
 ]);
 export const releaseFiles = [
   ...staticAssets.keys(),

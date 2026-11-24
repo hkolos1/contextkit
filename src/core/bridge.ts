@@ -9,6 +9,8 @@ export type Command =
       tool: Tool;
       args: unknown;
       confirmed: boolean;
+      /** Milliseconds to wait for the page; defaults to 25 seconds. */
+      timeout?: number;
     }
   | { kind: "history" | "clear" }
   | { kind: "persist"; enabled: boolean };
@@ -63,7 +65,11 @@ export function isCommand(v: unknown): v is Command {
         object(v.tool) &&
         typeof v.tool.name === "string" &&
         object(v.args) &&
-        typeof v.confirmed === "boolean"
+        typeof v.confirmed === "boolean" &&
+        (v.timeout === undefined ||
+          (Number.isInteger(v.timeout) &&
+            (v.timeout as number) >= 1000 &&
+            (v.timeout as number) <= 300000))
       );
     default:
       return false;

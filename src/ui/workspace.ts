@@ -1,6 +1,7 @@
 import { Component, computed, signal } from "@angular/core";
 import { Popup } from "./popup";
 import { Field } from "./field";
+import { Agent } from "./agent";
 import { request, errorMessage } from "../core/bridge";
 import {
   pretty,
@@ -18,14 +19,14 @@ import { emptySchema, initial, validate } from "../core/schema";
 import { download, report } from "./export";
 @Component({
   selector: "ck-app",
-  imports: [Field, Popup],
+  imports: [Field, Popup, Agent],
   templateUrl: "workspace.html",
 })
 export class Workspace {
   readonly version = chrome.runtime.getManifest().version;
   popup = document.body.classList.contains("popup");
-  tabs = ["Tools", "Playground", "Activity", "Audit"];
-  icons = ["wrench", "terminal", "activity", "shield-check"];
+  tabs = ["Tools", "Playground", "Agent", "Activity", "Audit"];
+  icons = ["wrench", "terminal", "bot", "activity", "shield-check"];
   section = signal("Tools");
   settings = signal(false);
   snap = signal<Snapshot | null>(null);

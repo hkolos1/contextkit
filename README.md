@@ -2,7 +2,7 @@
 
 # ContextKit
 
-Inspect, test and audit the WebMCP tools a website exposes, directly from a Chrome side panel. ContextKit runs locally and requires no account or API key.
+Inspect, test and audit the WebMCP tools a website exposes, directly from a Chrome side panel. ContextKit runs locally and needs no account. An optional Agent tab can drive the tools with Gemini, ChatGPT or Claude using your own API key.
 
 [![GitHub release](https://img.shields.io/github/v/release/hkolos1/contextkit)](https://github.com/hkolos1/contextkit/releases/latest)
 [![Build and tests](https://github.com/hkolos1/contextkit/actions/workflows/ci.yml/badge.svg)](https://github.com/hkolos1/contextkit/actions/workflows/ci.yml)
@@ -28,6 +28,7 @@ Visit a WebMCP-enabled HTTPS or localhost page. Click **ContextKit** in Chrome's
 | --- | --- |
 | Tools | Search the inventory, filter safety hints, inspect schemas and annotations, and copy, export or import definitions. |
 | Playground | Edit nested arguments with generated forms or raw JSON, validate them, run a tool, and inspect its result and duration. Consequential, destructive and unclassified actions require confirmation. |
+| Agent | Describe a task in plain language. The model picks and calls the page's tools; read-only calls run directly, other calls wait for your approval (consequential and destructive ones always). Choose Gemini (default), ChatGPT or Claude and add that provider's API key in the tab's settings; a Gemini key from Google AI Studio works on its free tier. |
 | Activity | Review observed inventory changes and calls initiated by ContextKit. Filter, clear or export the journal. |
 | Audit | Review specification issues, authoring recommendations and heuristics. Save a JSON report or standalone HTML report. |
 
@@ -40,11 +41,11 @@ Both screenshots show the built extension inspecting the included native WebMCP 
 - **Desktop Chrome.** Chrome 116 introduced the user-gesture side-panel action. Live discovery additionally needs a secure context and Chrome’s experimental WebMCP API in the isolated content script. Release checks passed with Chrome for Testing **158.0.8127.88** (Stable on November 24, 2026) and **159.0.8154.6**. The site origin trial began in Chrome 149. For local development, use the flag in step 7. [Chrome WebMCP guide](https://developer.chrome.com/docs/ai/webmcp) · [Side Panel API](https://developer.chrome.com/docs/extensions/reference/api/sidePanel)
 - **Document scope.** The adapter uses native `document.modelContext.getTools()` and `executeTool()` for the active top-level document. Registration style may be unavailable. Cross-frame tools, results after navigation and other agents’ execution histories are outside the inspector's scope. [WebMCP specification](https://webmachinelearning.github.io/webmcp/)
 - **Offline use.** Import an inventory when native discovery is unavailable. Forms support common object, array and scalar schemas. Unsupported keywords such as references, patterns and composition block execution. Safety hints come from the website. Audit heuristics identify metadata for human review.
-- **Bounds.** Imports accept up to 150 tools and 1 MB on disk, subject to depth and complexity limits. Arguments and results are capped at 48,000 serialized characters. An invocation timeout ends local waiting after 25 seconds. Check the site before retrying a state-changing tool.
+- **Bounds.** Imports accept up to 150 tools and 1 MB on disk, subject to depth and complexity limits. Arguments and results are capped at 48,000 serialized characters. An invocation timeout ends local waiting after 25 seconds (five minutes for Agent calls). Check the site before retrying a state-changing tool.
 
 ## Privacy and security
 
-The manifest requests `activeTab` and `scripting` for on-demand inspection, `sidePanel` for the workspace, and `storage` for preferences and history. It declares no host permissions. History stays in session memory by default. Settings can persist it on this device. Exported files may include sensitive arguments and results. [Privacy](PRIVACY.md) · [Security](SECURITY.md)
+The extension pages may connect only to the Gemini, OpenAI and Anthropic APIs (Content Security Policy), which the Agent tab uses after you add a key for that provider. The manifest requests `activeTab` and `scripting` for on-demand inspection, `sidePanel` for the workspace, and `storage` for preferences and history. It declares no host permissions. History stays in session memory by default. Settings can persist it on this device. Exported files may include sensitive arguments and results. [Privacy](PRIVACY.md) · [Security](SECURITY.md)
 
 ## Development
 

@@ -1,0 +1,206 @@
+<div class="heading">
+  <div class="line agent-title">
+    <h1>Agent</h1>
+    @if (key()) {
+      <span class="count agent-model" [title]="model()">{{ model() }}</span>
+    }
+  </div>
+  @if (key()) {
+    <div class="actions">
+      <button
+        type="button"
+        class="icon"
+        title="New chat"
+        aria-label="New chat"
+        [disabled]="!steps().length"
+        (click)="reset()"
+      >
+        <i style="--icon: url(icons/square-pen.svg)"></i></button
+      ><button
+        type="button"
+        class="icon"
+        title="Agent settings"
+        aria-label="Agent settings"
+        [attr.aria-expanded]="editing()"
+        (click)="editing.set(!editing())"
+      >
+        <i style="--icon: url(icons/settings-2.svg)"></i>
+      </button>
+    </div>
+  }
+</div>
+@if (editing() || !key()) {
+  <section class="setup">
+    @if (!key()) {
+      <span class="avatar"><i style="--icon: url(icons/bot.svg)"></i></span>
+      <h2>Connect an AI model</h2>
+      <p class="muted">
+        Describe a task in plain language and the model calls this page's WebMCP tools for you. Anything that changes
+        the page waits for your approval.
+      </p>
+    }
+    <label
+      >Provider
+      <select [value]="provider()" (change)="setProvider($any($event.target).value)">
+        @for (p of providers; track p.id) {
+          <option [value]="p.id">{{ p.label }}</option>
+        }
+      </select></label
+    >
+    <label
+      >API key
+      <input
+        #keyInput
+        type="password"
+        autocomplete="off"
+        spellcheck="false"
+        [placeholder]="info().placeholder"
+        [value]="key()"
+        (keydown.enter)="saveKey(keyInput.value)"
+    /></label>
+    @if (key()) {
+      <label
+        >Model
+        @if (models().length) {
+          <select (change)="setModel($any($event.target).value)">
+            @if (!models().includes(model())) {
+              <option value="" disabled [selected]="true">Choose a model</option>
+            }
+            @for (m of models(); track m) {
+              <option [value]="m" [selected]="m === model()">{{ m }}</option>
+            }
+          </select>
+        } @else {
+          <input
+            spellcheck="false"
+            placeholder="Model id"
+            [value]="model()"
+            (change)="setModel($any($event.target).value)"
+          />
+        }
+      </label>
+      @if (models().length && provider() !== "anthropic") {
+        <small>{{ models().length }} models available for this key.</small>
+      }
+    }
+    @if (listError()) {
+      <p class="note error">{{ listError() }}</p>
+    }
+    <div class="actions">
+      <button type="button" class="primary" (click)="saveKey(keyInput.value)">
+        {{ key() ? "Save" : "Connect" }}</button
+      >@if (key()) {
+        <button type="button" (click)="editing.set(false)">Cancel</button
+        ><button type="button" class="danger" (click)="removeKey()">Remove key</button>
+      }
+    </div>
+    <small
+      >Keys are stored only in this browser and each is sent only to its provider ({{ info().host }}). Prompts, tool
+      definitions and tool results go to that provider and count toward the key's quota or billing.</small
+    >
+  </section>
+} @else {
+  <div class="transcript" aria-live="polite">
+    @for (s of steps(); track $index) {
+      @switch (s.kind) {
+        @case ("user") {
+          <p class="bubble user">{{ s.text }}</p>
+        }
+        @case ("text") {
+          <p class="bubble">{{ s.text }}</p>
+        }
+        @case ("notice") {
+          <p class="note" [class.error]="s.error">{{ s.text }}</p>
+        }
+        @case ("tool") {
+          <details class="call" [class.pending]="s.status === 'approval'" [open]="s.status === 'approval'">
+            <summary>
+              <div class="line">
+                <code>{{ s.name }}</code
+                ><span
+                  class="tag"
+                  [class.safe]="s.status === 'done'"
+                  [class.error]="s.status === 'error'"
+                  [class.warning]="s.status === 'approval'"
+                  >{{ s.status === "approval" ? "needs approval" : s.status
+                  }}{{ s.duration !== undefined ? " · " + s.duration + " ms" : "" }}</span
+                >
+              </div>
+            </summary>
+            <small>{{ s.level }} · arguments</small>
+            <pre>{{ pretty(s.args) }}</pre>
+            @if (s.status === "approval") {
+              <div class="actions">
+                <button type="button" class="primary" (click)="approve(true)">Approve and run</button
+                ><button type="button" (click)="approve(false)">Decline</button>
+              </div>
+            }
+            @if (s.response !== undefined) {
+              <small>Result</small>
+              <pre>{{ pretty(s.response) }}</pre>
+            }
+          </details>
+        }
+      }
+    } @empty {
+      <div class="welcome">
+        <span class="avatar"><i style="--icon: url(icons/bot.svg)"></i></span>
+        <h2>What should I do on this page?</h2>
+        <p class="muted">
+          {{
+            ready()
+              ? "Read-only tools run directly. Anything that changes the page waits for your approval."
+              : "Open a page that registers WebMCP tools, then refresh."
+          }}
+        </p>
+        @if (ready()) {
+          <button type="button" class="chip" (click)="prompt.set('What can I do on this page?')">
+            What can I do on this page?
+          </button>
+        }
+      </div>
+    }
+    @if (busy() && !waiting()) {
+      <p class="note thinking"><span class="dot"></span>Working…</p>
+    }
+  </div>
+  <div class="dock">
+    <div class="composer">
+      <textarea
+        rows="2"
+        maxlength="4000"
+        aria-label="Message for the agent"
+        placeholder="Ask the agent…"
+        [value]="prompt()"
+        [disabled]="busy()"
+        (input)="prompt.set($any($event.target).value)"
+        (keydown.enter)="enter($any($event))"
+      ></textarea>
+      <div class="composer-bar">
+        <label
+          class="auto"
+          title="Runs unclassified state-changing tools without asking. Consequential and destructive tools always ask."
+          ><input type="checkbox" [checked]="autoApprove()" (change)="autoApprove.set($any($event.target).checked)" />
+          Auto-approve writes</label
+        >
+        @if (busy()) {
+          <button type="button" class="send" title="Stop" aria-label="Stop" (click)="stop()">
+            <i style="--icon: url(icons/square.svg)"></i>
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="send primary"
+            title="Send"
+            aria-label="Send"
+            [disabled]="!prompt().trim() || !ready()"
+            (click)="send()"
+          >
+            <i style="--icon: url(icons/send.svg)"></i>
+          </button>
+        }
+      </div>
+    </div>
+    <small class="hint">Enter to send · Shift+Enter for a new line</small>
+  </div>
+}

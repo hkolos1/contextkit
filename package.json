@@ -1,6 +1,6 @@
 {
   "name": "contextkit-webmcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -21,6 +21,7 @@
     "@angular/common": "22.3.0",
     "@angular/core": "22.3.0",
     "@angular/platform-browser": "22.3.0",
+    "@anthropic-ai/sdk": "1.13.0",
     "lucide-static": "1.79.0",
     "rxjs": "7.8.2",
     "tslib": "2.9.1"

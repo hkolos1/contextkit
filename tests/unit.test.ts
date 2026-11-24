@@ -5,6 +5,13 @@ import { inspectSchema, validate } from "../src/core/schema";
 import { audit } from "../src/core/audit";
 import { append } from "../src/core/history";
 import { isCommand, trustedUI, unwrap } from "../src/core/bridge";
+import { agentTools } from "../src/core/agent";
+import {
+  geminiTurn,
+  openaiTurn,
+  preferredModel,
+  transient,
+} from "../src/core/providers";
 const tool = {
   name: "read",
   description: "Return one inventory item.",
@@ -175,4 +182,115 @@ it("serializes history writes, migrates persistence both ways and clears records
   } finally {
     vi.unstubAllGlobals();
   }
+});
+describe("agent", () => {
+  it("maps WebMCP tools to valid, unique Claude tool definitions", () => {
+    const { defs, byName } = agentTools([
+      { name: "cart.add", description: "Add", inputSchema: { properties: {} } },
+      { name: "cart_add", description: "" },
+    ]);
+    expect(defs.map((d) => d.name)).toEqual(["cart_add", "cart_add_2"]);
+    expect(defs.every((d) => /^[a-zA-Z0-9_-]{1,64}$/.test(d.name))).toBe(true);
+    expect(defs[0].input_schema.type).toBe("object");
+    expect(defs[1].description).toBe("WebMCP tool cart_add");
+    expect(byName.get("cart_add")?.name).toBe("cart.add");
+  });
+  it("bounds agent run timeouts", () => {
+    const run = {
+      kind: "run",
+      windowId: 1,
+      target: { tab: 1, documentId: "d", origin: "https://x.test" },
+      tool: { name: "t" },
+      args: {},
+      confirmed: false,
+    };
+    expect(isCommand({ ...run, timeout: 300000 })).toBe(true);
+    expect(isCommand({ ...run, timeout: 3600000 })).toBe(false);
+  });
+});
+describe("agent providers", () => {
+  it("reads Gemini function calls and keeps parts for the next request", () => {
+    const { content, turn } = geminiTurn({
+      candidates: [
+        {
+          finishReason: "STOP",
+          content: {
+            parts: [
+              { text: "thinking", thought: true },
+              { text: "Searching." },
+              {
+                functionCall: { id: "a1", name: "search", args: { q: "x" } },
+                thoughtSignature: "sig",
+              },
+            ],
+          },
+        },
+      ],
+    });
+    expect(turn).toEqual({
+      text: ["Searching."],
+      calls: [{ id: "a1", name: "search", args: { q: "x" } }],
+      stop: "tools",
+    });
+    expect(content.parts[2].thoughtSignature).toBe("sig");
+    expect(
+      geminiTurn({ promptFeedback: { blockReason: "SAFETY" } }).turn.stop,
+    ).toBe("refusal");
+  });
+  it("reads OpenAI tool calls and flags invalid arguments", () => {
+    const { message, turn } = openaiTurn({
+      choices: [
+        {
+          finish_reason: "tool_calls",
+          message: {
+            role: "assistant",
+            content: null,
+            refusal: null,
+            tool_calls: [
+              {
+                id: "c1",
+                type: "function",
+                function: { name: "add", arguments: '{"id":"p"}' },
+              },
+              {
+                id: "c2",
+                type: "function",
+                function: { name: "add", arguments: "{oops" },
+              },
+            ],
+          },
+        },
+      ],
+    });
+    expect(turn.stop).toBe("tools");
+    expect(turn.calls.map((c) => c.args)).toEqual([{ id: "p" }, null]);
+    expect(Object.keys(message).sort()).toEqual([
+      "content",
+      "role",
+      "tool_calls",
+    ]);
+  });
+  it("prefers a fast general model by default", () => {
+    expect(
+      preferredModel("gemini", [
+        "gemini-omni-9-flash",
+        "gemini-9-pro",
+        "gemini-9-flash-lite",
+        "gemini-9-flash",
+      ]),
+    ).toBe("gemini-9-flash");
+    expect(
+      preferredModel("openai", [
+        "gpt-9",
+        "gpt-9-mini",
+        "gpt-9-mini-2026-01-01",
+      ]),
+    ).toBe("gpt-9-mini");
+  });
+  it("retries only temporary provider errors", () => {
+    expect(transient(503, "high demand")).toBe(true);
+    expect(transient(429, "per minute limit")).toBe(true);
+    expect(transient(429, "limit: 0, model: x")).toBe(false);
+    expect(transient(400, "bad request")).toBe(false);
+  });
 });

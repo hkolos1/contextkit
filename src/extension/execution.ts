@@ -26,14 +26,15 @@ export async function execute(m: Extract<Command, { kind: "run" }>) {
         confirmed: m.confirmed,
       }),
       new Promise((_, reject) => {
+        const wait = m.timeout ?? 25000;
         timer = setTimeout(
           () =>
             reject(
               Error(
-                "No result within 25 seconds. The action may have completed.",
+                `No result within ${wait / 1000} seconds. The action may have completed.`,
               ),
             ),
-          25000,
+          wait,
         );
       }),
     ]);
