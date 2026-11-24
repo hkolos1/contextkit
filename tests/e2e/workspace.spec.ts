@@ -225,3 +225,44 @@ test("nested schema editing, raw validation and native side panel action", async
     await w.close();
   }
 });
+
+test("drops the inventory when switching tabs and rejects stale document execution", async () => {
+  const w = await workspace(true);
+  try {
+    await expect(w.panel.getByText("WebMCP available")).toBeVisible();
+    const previous = await w.panel.evaluate(async () => {
+      const windowId = (await chrome.windows.getCurrent()).id;
+      const response = await chrome.runtime.sendMessage({
+        kind: "inspect",
+        windowId,
+      });
+      const { tab, origin, documentId, tools } = response.value;
+      return {
+        kind: "run",
+        windowId,
+        target: { tab, origin, documentId },
+        tool: tools.find((t: { name: string }) => t.name === "delete_item"),
+        args: { id: "A1" },
+        confirmed: true,
+      };
+    });
+    const other = await w.context.newPage();
+    await other.goto("http://127.0.0.1:4178/empty.html");
+    await other.bringToFront();
+    await expect(
+      w.panel.getByText("Access needed", { exact: true }),
+    ).toBeVisible();
+    await expect(w.panel.locator("summary")).toHaveCount(0);
+    await w.site.bringToFront();
+    await w.site.reload();
+    await expect(w.panel.getByText("WebMCP available")).toBeVisible();
+    const reply = await w.panel.evaluate(
+      (msg) => chrome.runtime.sendMessage(msg),
+      previous,
+    );
+    expect(reply.value.kind).toBe("Error");
+    await expect(w.site.locator("#items")).toContainText("Field notebook");
+  } finally {
+    await w.close();
+  }
+});

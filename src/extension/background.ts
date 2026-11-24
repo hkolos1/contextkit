@@ -20,9 +20,26 @@ async function inspect(windowId: number): Promise<Snapshot> {
   });
   if (!frame?.documentId)
     throw Error("The active document changed. Refresh to reconnect.");
-  const snap = await page<PageSnapshot>(tab.id, frame.documentId, {
-    kind: "discover",
-  });
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let snap: PageSnapshot;
+  try {
+    snap = await Promise.race([
+      page<PageSnapshot>(tab.id, frame.documentId, { kind: "discover" }),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(
+          () =>
+            reject(
+              Error(
+                "Tool discovery timed out. Refresh after the site finishes registering tools.",
+              ),
+            ),
+          12000,
+        );
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
   if (snap.origin !== tab.origin || (await active(windowId)).id !== tab.id)
     throw Error("The active tab changed.");
   const signature = JSON.stringify(snap.tools);

@@ -14,7 +14,7 @@ const types = [
   "null",
 ];
 const allowed = new Set(
-  "type title description default examples properties required additionalProperties items enum const minimum maximum minLength maxLength minItems maxItems".split(
+  "$schema type title description default examples properties required additionalProperties items enum const minimum maximum minLength maxLength minItems maxItems".split(
     " ",
   ),
 );
@@ -30,6 +30,13 @@ export function inspectSchema(schema: unknown, path = "$"): SchemaIssue[] {
   const issues: SchemaIssue[] = [];
   const issue = (message: string, unsupported = false) =>
     issues.push({ path, message, unsupported });
+  if (
+    schema.$schema !== undefined &&
+    schema.$schema !== "https://json-schema.org/draft/2020-12/schema"
+  )
+    issue("Only the 2020-12 dialect is recognized locally.", true);
+  if (schema.examples !== undefined && !Array.isArray(schema.examples))
+    issue("examples must be an array.");
   for (const key of Object.keys(schema))
     if (!allowed.has(key))
       issue(`Local validator does not implement ${key}.`, true);

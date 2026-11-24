@@ -83,7 +83,9 @@ export class Workspace {
       : this.loading()
         ? "Inspecting"
         : this.problem()
-          ? "Access needed"
+          ? this.problem().includes("toolbar icon")
+            ? "Access needed"
+            : "Inspection error"
           : this.snap()?.available
             ? "WebMCP available"
             : "Unavailable",
@@ -119,6 +121,14 @@ export class Workspace {
       }
     });
     chrome.runtime.onMessage.addListener((m, s) => {
+      if (
+        !this.popup &&
+        m?.kind === "panel-opened" &&
+        m.windowId === this.windowId &&
+        s.url === chrome.runtime.getURL("popup.html") &&
+        this.offline() === null
+      )
+        void this.refresh();
       if (
         m?.kind === "toolchange" &&
         s.tab?.id === this.tabId &&
@@ -254,7 +264,12 @@ export class Workspace {
   }
   openPanel() {
     void chrome.sidePanel.open({ windowId: this.windowId }).then(
-      () => window.close(),
+      async () => {
+        await chrome.runtime
+          .sendMessage({ kind: "panel-opened", windowId: this.windowId })
+          .catch(() => {});
+        window.close();
+      },
       (e) => this.notice.set(errorMessage(e)),
     );
   }
