@@ -7,3 +7,9 @@ Run `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npx playw
 Keep browser API adaptations in the isolated content-script adapter. Link a primary browser or specification source for API changes. Add a regression test when changing the permission boundary, persistence behavior, schema semantics or an audit classification. Keep demo data in the demo or tests. Explain how you verified a change and call out browser-dependent behavior in the pull request.
 
 Contributions are licensed under the MIT license.
+
+## Releases
+
+The public distribution channel is [GitHub Releases](https://github.com/hkolos1/contextkit/releases). For a release, update the npm version and lockfile, the manifest version, the changelog and the matching notes in `docs/releases/vX.Y.Z.md`. Settings reads the installed version directly from the manifest.
+
+Run `npm run package` to create `release/contextkit-vX.Y.Z.zip`. Commit the release changes, tag that commit with the matching `vX.Y.Z` tag and push the branch and tag. The release workflow validates versions, builds the production ZIP, runs the browser suite against its extracted contents and publishes the tested asset. Use `CONTEXTKIT_CHROME` to test with a particular Chrome for Testing executable, and `CONTEXTKIT_EXTENSION_DIR` to test an extracted release locally.
