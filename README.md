@@ -17,11 +17,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/hkolos1/contextkit/releases/latest"><b>⬇️ Download the latest release</b></a>
-  ·
-  <a href="#install">Install in 60 seconds</a>
-  ·
-  <a href="PRIVACY.md">Privacy</a>
+  <a href="https://github.com/hkolos1/contextkit/releases/latest"><img alt="Download the latest release" src="https://img.shields.io/badge/Download-latest_release-6d28d9?style=for-the-badge&logo=github&logoColor=white"></a>
+  <a href="#install"><img alt="Install guide" src="https://img.shields.io/badge/Install-in_60_seconds-1f2937?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
 </p>
 
 <p align="center">
