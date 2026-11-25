@@ -7,7 +7,6 @@ import {
 } from "@angular/core";
 import { Constellation } from "../constellation";
 import { Globe } from "../globe";
-import { Logo3d } from "../logo3d";
 import { Icon } from "../icon";
 import { features, installHref, site } from "../site";
 import { webmcp } from "../webmcp";
@@ -20,7 +19,7 @@ interface View {
 
 @Component({
   selector: "tp-home",
-  imports: [Icon, Globe, Logo3d, Constellation],
+  imports: [Icon, Globe, Constellation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./home.html",
 })

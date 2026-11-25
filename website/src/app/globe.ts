@@ -7,7 +7,6 @@ import {
   inject,
   viewChild,
 } from "@angular/core";
-import { webglAvailable } from "./three/stage";
 
 /**
  * Rotating dotted sphere rising like a horizon behind the hero, coloured like
@@ -26,16 +25,7 @@ export class Globe {
   private destroyRef = inject(DestroyRef);
 
   constructor() {
-    afterNextRender(() => this.choose());
-  }
-
-  /** three.js globe when WebGL is available (loaded lazily); 2D canvas otherwise. */
-  private choose() {
-    const canvas = this.canvas().nativeElement;
-    if (!webglAvailable()) return this.start();
-    import("./three/globe-scene")
-      .then(({ globeScene }) => this.destroyRef.onDestroy(globeScene(canvas)))
-      .catch(() => this.start());
+    afterNextRender(() => this.start());
   }
 
   private start() {
