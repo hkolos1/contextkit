@@ -5,7 +5,9 @@ import {
   inject,
   signal,
 } from "@angular/core";
+import { Constellation } from "../constellation";
 import { Globe } from "../globe";
+import { Logo3d } from "../logo3d";
 import { Icon } from "../icon";
 import { features, installHref, site } from "../site";
 import { webmcp } from "../webmcp";
@@ -18,7 +20,7 @@ interface View {
 
 @Component({
   selector: "tp-home",
-  imports: [Icon, Globe],
+  imports: [Icon, Globe, Logo3d, Constellation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./home.html",
 })
@@ -53,6 +55,20 @@ export default class Home {
 
   readonly features = features;
   readonly webmcp = webmcp;
+  readonly steps = [
+    {
+      title: "The page registers tools",
+      text: "With WebMCP a website hands agents typed functions, such as search, checkout or update, with schemas and safety hints.",
+    },
+    {
+      title: "An agent calls them",
+      text: "Instead of clicking through the page, the agent picks a tool, fills in its arguments and runs it.",
+    },
+    {
+      title: "Toolpeek shows you every step",
+      text: "See which tools exist, run them yourself, or let a model drive while you approve each change.",
+    },
+  ];
 
   readonly sourceSteps = `git clone \\
   ${site.repo}

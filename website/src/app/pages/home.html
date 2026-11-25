@@ -3,9 +3,10 @@
     <span></span><span></span><span></span>
   </div>
   <tp-globe
-    class="absolute left-1/2 top-[530px] h-[790px] w-[min(1200px,170vw)] -translate-x-1/2 [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_50%,transparent_92%)] sm:top-[370px]"
+    class="absolute left-1/2 top-[640px] h-[790px] w-[min(1200px,170vw)] -translate-x-1/2 [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_50%,transparent_92%)] sm:top-[490px]"
   />
   <div class="relative mx-auto max-w-6xl px-5 pb-16 pt-20 text-center sm:pt-28">
+    <tp-logo3d class="rise mx-auto -mt-8 mb-2 size-36 sm:size-40" />
     <p class="rise bg-gradient-to-r from-aurora-green via-aurora-cyan to-aurora-blue bg-clip-text font-mono text-xs uppercase tracking-[0.18em] text-transparent">
       Discover. Inspect. Execute.
     </p>
@@ -133,7 +134,7 @@
         </li>
       }
     </ul>
-    <div class="mt-6 flex items-start gap-3 rounded-xl border border-line bg-surface p-5 text-sm text-muted">
+    <div style="--beam-delay: -2s" class="beam-border mt-6 flex items-start gap-3 rounded-xl border border-line bg-surface p-5 text-sm text-muted">
       <tp-icon name="wrench" [size]="18" class="mt-0.5 text-accent" />
       <p>
         <span class="text-fg">Try it on this page.</span>
@@ -155,6 +156,33 @@
         requests go to the AI provider you configure in the Agent tab, with your own key.
       </p>
     </div>
+  </div>
+</section>
+
+<section id="how" class="scroll-mt-20 border-t border-line/60">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+    <div>
+      <h2 class="text-3xl font-semibold tracking-tight sm:text-4xl">How an agent uses a page</h2>
+      <ol class="mt-8 space-y-6">
+        @for (step of steps; track step.title; let i = $index) {
+          <li class="flex gap-4">
+            <span
+              class="grid size-8 shrink-0 place-items-center rounded-full border border-line font-mono text-sm text-accent"
+              >{{ i + 1 }}</span
+            >
+            <div>
+              <h3 class="font-medium">{{ step.title }}</h3>
+              <p class="mt-1 text-sm leading-relaxed text-muted">{{ step.text }}</p>
+            </div>
+          </li>
+        }
+      </ol>
+      <p class="mt-8 text-xs text-muted">
+        The tools in the scene are the ones this website registers. Open Toolpeek here to see them for
+        real.
+      </p>
+    </div>
+    <tp-constellation class="h-[360px] w-full sm:h-[440px]" />
   </div>
 </section>
 

@@ -113,7 +113,7 @@ npm run e2e
 
 ### Website
 
-The landing page in [`website/`](website) is an Angular 22 + Tailwind CSS app deployed to Firebase Hosting at https://toolpeek.web.app.
+The landing page in [`website/`](website) is an Angular 22 + Tailwind CSS app deployed to Firebase Hosting at https://toolpeek.web.app. The 3D scenes (hero logo, globe, "How it works") use three.js, loaded lazily only when WebGL is available; without it the page falls back to a 2D globe and the flat logo, and reduced motion renders still frames.
 
 ```sh
 cd website
