@@ -4,13 +4,14 @@
 
 ContextKit is now **Toolpeek**.
 
-- Renamed the project, extension, package and repository to Toolpeek, with a new logo, icons and design system. Stored settings, history and API keys are unchanged.
-- Redesigned the side panel and popup: new dark and light palettes, Geist typography and a segmented theme control (System remains the default and follows the OS).
+- Renamed the project, extension, package and repository to Toolpeek, with a new `{•}` logo, icons and aurora design system. Stored settings, history and API keys are unchanged.
+- Redesigned the side panel and popup: new dark and light themes, Geist typography and a segmented theme control (System remains the default and follows the OS).
 - Tool details now summarize parameters before the raw JSON definition.
 - Responses show a success or error badge, duration and an icon copy action.
 - Added keyboard shortcuts: `/` focuses tool search, Ctrl/⌘+Enter runs the selected tool.
-- Added a show/hide toggle for API keys, self-dismissing copy notices and clearer guidance when a page has no WebMCP tools.
-- Added the landing page at https://toolpeek.web.app with a privacy policy, plus BRANDING.md and CHROME_WEB_STORE.md.
+- Added a show/hide toggle for API keys, self-dismissing copy notices and clearer guidance when a page has no WebMCP tools. Enum options no longer show JSON quotes.
+- The demo is now a store with a cart; new `add_to_cart` and `checkout` tools let you try a full purchase.
+- Added the landing page at https://toolpeek.web.app with a privacy policy and its own read-only WebMCP tools, plus BRANDING.md and CHROME_WEB_STORE.md.
 - Release automation now creates draft GitHub Releases; a website workflow builds and validates the site.
 
 ## [v0.2.0](https://github.com/hkolos1/toolpeek/releases/tag/v0.2.0) · 2026-11-25

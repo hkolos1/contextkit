@@ -84,32 +84,32 @@
   #receipt .total b { color: #a5f3fc; font-size: 18px; }
   #receipt .eyebrow { margin: 0 auto; }
   .confetti i { position: absolute; left: 50%; top: 50%; width: 8px; height: 14px; border-radius: 2px; opacity: 0; }
-  #receipt.show .confetti i { animation: fly 1.4s cubic-bezier(.1, .7, .3, 1) forwards; }
+  #receipt.show .confetti i { animation: fly 1.4s cubic-bezier(.1, .7, .3, 1) var(--d, 0s) forwards; }
   @keyframes fly { 0% { opacity: 1; transform: translate(-50%, -50%) rotate(0); } 100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)); } }
-  .confetti i:nth-child(1) { --x: 239px; --y: -25px; --r: 271deg; background: #34d399; animation-delay: 0.07s !important; }
-  .confetti i:nth-child(2) { --x: 223px; --y: 22px; --r: 52deg; background: #22d3ee; animation-delay: 0.12s !important; }
-  .confetti i:nth-child(3) { --x: 214px; --y: 156px; --r: 197deg; background: #3b82f6; animation-delay: 0.04s !important; }
-  .confetti i:nth-child(4) { --x: 191px; --y: 147px; --r: -101deg; background: #a7f3d0; animation-delay: 0.14s !important; }
-  .confetti i:nth-child(5) { --x: 228px; --y: 263px; --r: -7deg; background: #e0f2fe; animation-delay: 0.12s !important; }
-  .confetti i:nth-child(6) { --x: 106px; --y: 261px; --r: 222deg; background: #34d399; animation-delay: 0.01s !important; }
-  .confetti i:nth-child(7) { --x: -15px; --y: 354px; --r: 496deg; background: #22d3ee; animation-delay: 0.04s !important; }
-  .confetti i:nth-child(8) { --x: -44px; --y: 272px; --r: 74deg; background: #3b82f6; animation-delay: 0.00s !important; }
-  .confetti i:nth-child(9) { --x: -154px; --y: 327px; --r: 98deg; background: #a7f3d0; animation-delay: 0.13s !important; }
-  .confetti i:nth-child(10) { --x: -215px; --y: 213px; --r: 50deg; background: #e0f2fe; animation-delay: 0.06s !important; }
-  .confetti i:nth-child(11) { --x: -222px; --y: 172px; --r: -452deg; background: #34d399; animation-delay: 0.01s !important; }
-  .confetti i:nth-child(12) { --x: -404px; --y: 115px; --r: 522deg; background: #22d3ee; animation-delay: 0.08s !important; }
-  .confetti i:nth-child(13) { --x: -289px; --y: 3px; --r: -140deg; background: #3b82f6; animation-delay: 0.01s !important; }
-  .confetti i:nth-child(14) { --x: -316px; --y: -144px; --r: 363deg; background: #a7f3d0; animation-delay: 0.04s !important; }
-  .confetti i:nth-child(15) { --x: -330px; --y: -166px; --r: 116deg; background: #e0f2fe; animation-delay: 0.10s !important; }
-  .confetti i:nth-child(16) { --x: -224px; --y: -176px; --r: -414deg; background: #34d399; animation-delay: 0.11s !important; }
-  .confetti i:nth-child(17) { --x: -193px; --y: -275px; --r: -54deg; background: #22d3ee; animation-delay: 0.02s !important; }
-  .confetti i:nth-child(18) { --x: -24px; --y: -277px; --r: -488deg; background: #3b82f6; animation-delay: 0.01s !important; }
-  .confetti i:nth-child(19) { --x: 31px; --y: -398px; --r: 45deg; background: #a7f3d0; animation-delay: 0.11s !important; }
-  .confetti i:nth-child(20) { --x: 96px; --y: -202px; --r: 51deg; background: #e0f2fe; animation-delay: 0.05s !important; }
-  .confetti i:nth-child(21) { --x: 132px; --y: -325px; --r: -381deg; background: #34d399; animation-delay: 0.04s !important; }
-  .confetti i:nth-child(22) { --x: 190px; --y: -244px; --r: -261deg; background: #22d3ee; animation-delay: 0.04s !important; }
-  .confetti i:nth-child(23) { --x: 223px; --y: -117px; --r: -521deg; background: #3b82f6; animation-delay: 0.05s !important; }
-  .confetti i:nth-child(24) { --x: 282px; --y: -81px; --r: 202deg; background: #a7f3d0; animation-delay: 0.15s !important; }
+  .confetti i:nth-child(1) { --x: 239px; --y: -25px; --r: 271deg; background: #34d399; --d: 0.07s; }
+  .confetti i:nth-child(2) { --x: 223px; --y: 22px; --r: 52deg; background: #22d3ee; --d: 0.12s; }
+  .confetti i:nth-child(3) { --x: 214px; --y: 156px; --r: 197deg; background: #3b82f6; --d: 0.04s; }
+  .confetti i:nth-child(4) { --x: 191px; --y: 147px; --r: -101deg; background: #a7f3d0; --d: 0.14s; }
+  .confetti i:nth-child(5) { --x: 228px; --y: 263px; --r: -7deg; background: #e0f2fe; --d: 0.12s; }
+  .confetti i:nth-child(6) { --x: 106px; --y: 261px; --r: 222deg; background: #34d399; --d: 0.01s; }
+  .confetti i:nth-child(7) { --x: -15px; --y: 354px; --r: 496deg; background: #22d3ee; --d: 0.04s; }
+  .confetti i:nth-child(8) { --x: -44px; --y: 272px; --r: 74deg; background: #3b82f6; --d: 0.00s; }
+  .confetti i:nth-child(9) { --x: -154px; --y: 327px; --r: 98deg; background: #a7f3d0; --d: 0.13s; }
+  .confetti i:nth-child(10) { --x: -215px; --y: 213px; --r: 50deg; background: #e0f2fe; --d: 0.06s; }
+  .confetti i:nth-child(11) { --x: -222px; --y: 172px; --r: -452deg; background: #34d399; --d: 0.01s; }
+  .confetti i:nth-child(12) { --x: -404px; --y: 115px; --r: 522deg; background: #22d3ee; --d: 0.08s; }
+  .confetti i:nth-child(13) { --x: -289px; --y: 3px; --r: -140deg; background: #3b82f6; --d: 0.01s; }
+  .confetti i:nth-child(14) { --x: -316px; --y: -144px; --r: 363deg; background: #a7f3d0; --d: 0.04s; }
+  .confetti i:nth-child(15) { --x: -330px; --y: -166px; --r: 116deg; background: #e0f2fe; --d: 0.10s; }
+  .confetti i:nth-child(16) { --x: -224px; --y: -176px; --r: -414deg; background: #34d399; --d: 0.11s; }
+  .confetti i:nth-child(17) { --x: -193px; --y: -275px; --r: -54deg; background: #22d3ee; --d: 0.02s; }
+  .confetti i:nth-child(18) { --x: -24px; --y: -277px; --r: -488deg; background: #3b82f6; --d: 0.01s; }
+  .confetti i:nth-child(19) { --x: 31px; --y: -398px; --r: 45deg; background: #a7f3d0; --d: 0.11s; }
+  .confetti i:nth-child(20) { --x: 96px; --y: -202px; --r: 51deg; background: #e0f2fe; --d: 0.05s; }
+  .confetti i:nth-child(21) { --x: 132px; --y: -325px; --r: -381deg; background: #34d399; --d: 0.04s; }
+  .confetti i:nth-child(22) { --x: 190px; --y: -244px; --r: -261deg; background: #22d3ee; --d: 0.04s; }
+  .confetti i:nth-child(23) { --x: 223px; --y: -117px; --r: -521deg; background: #3b82f6; --d: 0.05s; }
+  .confetti i:nth-child(24) { --x: 282px; --y: -81px; --r: 202deg; background: #a7f3d0; --d: 0.15s; }
   @media (max-width: 720px) { #log { grid-template-columns: 1fr; } #log li:nth-child(2) { border-top: 1px solid rgb(255 255 255 / .04); } nav { display: none; } }
 </style>
 <header>
@@ -147,7 +147,7 @@
     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
   </div>
   <div class="card">
-    <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+    <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
     <p class="eyebrow">Payment confirmed</p>
     <h2>Order <span data-order></span> placed</h2>
     <ul data-lines></ul>
