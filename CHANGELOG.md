@@ -11,7 +11,7 @@ ContextKit is now **Toolpeek**.
 - Added keyboard shortcuts: `/` focuses tool search, Ctrl/⌘+Enter runs the selected tool.
 - Added a show/hide toggle for API keys, self-dismissing copy notices and clearer guidance when a page has no WebMCP tools.
 - Added the landing page at https://toolpeek.web.app with a privacy policy, plus BRANDING.md and CHROME_WEB_STORE.md.
-- Release automation now creates draft GitHub Releases; a website workflow builds and deploys the site.
+- Release automation now creates draft GitHub Releases; a website workflow builds and validates the site.
 
 ## [v0.2.0](https://github.com/hkolos1/toolpeek/releases/tag/v0.2.0) · 2026-11-25
 

@@ -123,11 +123,7 @@ npm run build      # static output in website/dist/website/browser
 npm run deploy     # build + firebase deploy (needs firebase-tools and access to the project)
 ```
 
-Pushes to `main` that touch `website/` deploy automatically through `.github/workflows/website.yml`. That workflow needs one repository secret:
-
-| Secret | Value |
-| --- | --- |
-| `FIREBASE_SERVICE_ACCOUNT_TOOLPEEK` | JSON key of a service account with the *Firebase Hosting Admin* role on the `toolpeek` project. Create it with `firebase init hosting:github` in `website/`, or in Google Cloud IAM. |
+CI only builds and validates the site. Deploys are manual with `npm run deploy`, so the repository holds no credentials.
 
 The Chrome Web Store link is configured once in `website/src/app/site.ts`.
 

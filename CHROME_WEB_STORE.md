@@ -154,6 +154,6 @@ The policy includes the required Limited Use statement.
 2. **Add new item** and upload `release/toolpeek-v1.0.0.zip`.
 3. Fill in the listing, graphics and privacy tab from this file. Set the homepage to https://toolpeek.web.app and support to https://github.com/hkolos1/toolpeek/issues.
 4. Choose visibility (Public or Unlisted) and the regions, then submit for review. Use deferred publishing if you want to release by hand after approval.
-5. After approval, set `chromeWebStore` in `website/src/app/site.ts`, update the README, then push to `main`. The website redeploys.
+5. After approval, set `chromeWebStore` in `website/src/app/site.ts`, update the README, then run `npm run deploy` in `website/`.
 
 Later versions: bump the version (see README › Releases), run `npm run package` and upload the new ZIP under **Package**.
