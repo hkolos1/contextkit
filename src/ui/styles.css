@@ -17,15 +17,16 @@
 }
 :root {
   color-scheme: dark;
-  --bg: #09090f;
-  --surface: #15151f;
-  --raised: #1e1e2b;
-  --line: #30303d;
-  --text: #fafafa;
-  --muted: #a1a1aa;
-  --primary: #8b5cf6;
-  --primary-fill: #7c3aed;
-  --accent: #c4b5fd;
+  --bg: #06090d;
+  --surface: #0d1318;
+  --raised: #151e25;
+  --line: #24313a;
+  --text: #f2f6f8;
+  --muted: #93a1ac;
+  --primary: #2dd4bf;
+  --primary-fill: #2dd4bf;
+  --on-primary: #04161a;
+  --accent: #67e8f9;
   --green: #4ade80;
   --warn: #fbbf24;
   --error: #f87171;
@@ -35,15 +36,16 @@
 }
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #fafafb;
+  --bg: #f7fafb;
   --surface: #ffffff;
-  --raised: #f1effa;
-  --line: #e2e1ea;
-  --text: #09090f;
-  --muted: #5b5b66;
-  --primary: #7c3aed;
-  --primary-fill: #7c3aed;
-  --accent: #6d28d9;
+  --raised: #e8f4f3;
+  --line: #d7e2e6;
+  --text: #06090d;
+  --muted: #52616b;
+  --primary: #0d9488;
+  --primary-fill: #0f766e;
+  --on-primary: #ffffff;
+  --accent: #0e7490;
   --green: #15803d;
   --warn: #a16207;
   --error: #b91c1c;
@@ -51,18 +53,19 @@
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --bg: #fafafb;
-    --surface: #ffffff;
-    --raised: #f1effa;
-    --line: #e2e1ea;
-    --text: #09090f;
-    --muted: #5b5b66;
-    --primary: #7c3aed;
-    --primary-fill: #7c3aed;
-    --accent: #6d28d9;
-    --green: #15803d;
-    --warn: #a16207;
-    --error: #b91c1c;
+    --bg: #f7fafb;
+  --surface: #ffffff;
+  --raised: #e8f4f3;
+  --line: #d7e2e6;
+  --text: #06090d;
+  --muted: #52616b;
+  --primary: #0d9488;
+  --primary-fill: #0f766e;
+  --on-primary: #ffffff;
+  --accent: #0e7490;
+  --green: #15803d;
+  --warn: #a16207;
+  --error: #b91c1c;
   }
 }
 
@@ -273,7 +276,7 @@ i {
 }
 .primary {
   background: var(--primary-fill);
-  color: #fff;
+  color: var(--on-primary);
   border-color: var(--primary-fill);
   font-weight: 600;
 }
@@ -722,7 +725,7 @@ dialog {
   box-shadow: 0 16px 40px rgb(0 0 0 / 30%);
 }
 dialog::backdrop {
-  background: rgb(9 9 15 / 72%);
+  background: rgb(6 9 13 / 72%);
 }
 dialog pre {
   max-height: 25vh;

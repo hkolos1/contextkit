@@ -1,14 +1,16 @@
 /* Toolpeek design tokens. Dark is the primary identity; light mirrors it. */
 :root {
-  --tp-bg: #09090f;
-  --tp-surface: #15151f;
-  --tp-raised: #1e1e2b;
-  --tp-border: #30303d;
-  --tp-text: #fafafa;
-  --tp-text-muted: #a1a1aa;
-  --tp-primary: #8b5cf6; /* marks, focus rings, active states */
-  --tp-primary-fill: #7c3aed; /* filled buttons with white text (AA contrast) */
-  --tp-accent: #c4b5fd; /* links, highlights on dark */
+  --tp-bg: #06090d;
+  --tp-surface: #0d1318;
+  --tp-raised: #151e25;
+  --tp-border: #24313a;
+  --tp-text: #f2f6f8;
+  --tp-text-muted: #93a1ac;
+  --tp-primary: #2dd4bf; /* focus rings, active states, links */
+  --tp-primary-fill: #2dd4bf; /* filled buttons */
+  --tp-on-primary: #04161a; /* text on filled buttons */
+  --tp-accent: #67e8f9; /* highlights, icons */
+  --tp-aurora: linear-gradient(45deg, #34d399, #22d3ee 50%, #3b82f6); /* logo, sparing highlights */
   --tp-success: #4ade80;
   --tp-warning: #fbbf24;
   --tp-danger: #f87171;
@@ -19,15 +21,16 @@
   --tp-font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
 [data-theme="light"] {
-  --tp-bg: #fafafb;
+  --tp-bg: #f7fafb;
   --tp-surface: #ffffff;
-  --tp-raised: #f1effa;
-  --tp-border: #e2e1ea;
-  --tp-text: #09090f;
-  --tp-text-muted: #5b5b66;
-  --tp-primary: #7c3aed;
-  --tp-primary-fill: #7c3aed;
-  --tp-accent: #6d28d9;
+  --tp-raised: #e8f4f3;
+  --tp-border: #d7e2e6;
+  --tp-text: #06090d;
+  --tp-text-muted: #52616b;
+  --tp-primary: #0d9488;
+  --tp-primary-fill: #0f766e;
+  --tp-on-primary: #ffffff;
+  --tp-accent: #0e7490;
   --tp-success: #15803d;
   --tp-warning: #a16207;
   --tp-danger: #b91c1c;

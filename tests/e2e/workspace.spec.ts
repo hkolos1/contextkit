@@ -301,7 +301,7 @@ test("dropdown menus follow the panel theme and support keyboard selection", asy
         await filter.evaluate(
           (el) => getComputedStyle(el, "::picker(select)").backgroundColor,
         ),
-      ).toBe(theme === "light" ? "rgb(255, 255, 255)" : "rgb(21, 21, 31)");
+      ).toBe(theme === "light" ? "rgb(255, 255, 255)" : "rgb(13, 19, 24)");
       await panel.keyboard.press("Escape");
     }
     await filter.focus();
