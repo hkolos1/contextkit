@@ -68,3 +68,4 @@ Plain, specific and calm. Say what the extension does and what it doesn't. No hy
 | `assets/store/` | Chrome Web Store icon, screenshots and promo tiles (`scripts/promo.mjs`) |
 | `assets/social/og.png` | 1200×630 social preview, also served by the website |
 | `assets/readme/showcase.png` | README hero image |
+| `assets/video/` | Real recording of a cart-and-checkout session in the demo store (`scripts/demo-video.mjs`), as MP4 for the website and GIF for the README |

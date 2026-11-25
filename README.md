@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/readme/showcase.png" width="860" alt="Toolpeek in Chrome's side panel listing the WebMCP tools of the bundled demo page">
+  <img src="assets/video/demo.gif" width="860" alt="Recording: Toolpeek's Playground adds products to the demo store's cart and pays; the store confirms the order">
 </p>
 
 Websites can register **WebMCP tools**: typed functions that AI agents call instead of clicking through the page. Toolpeek shows you those tools and lets you work with them, all from Chrome's side panel.
@@ -136,6 +136,7 @@ npm run build
 node scripts/screenshots.mjs   # real captures of the extension against the demo
 node scripts/promo.mjs         # store, social and README images from those captures
 node scripts/brand.mjs         # icons and favicons from brand/symbol.svg
+node scripts/demo-video.mjs    # demo recording: assets/video/demo.mp4 and demo.gif
 ```
 
 ### Releases

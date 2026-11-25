@@ -21,7 +21,7 @@ const base = `<style>
 *{box-sizing:border-box;margin:0}
 body{background:#06090D;color:#F2F6F8;font-family:Geist,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
 .glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 45% at 25% -5%,rgb(52 211 153/.20),transparent 70%),radial-gradient(ellipse 55% 45% at 60% -10%,rgb(34 211 238/.18),transparent 70%),radial-gradient(ellipse 50% 40% at 90% 0%,rgb(59 130 246/.18),transparent 70%)}
-.frame{position:relative;display:grid;grid-template-columns:712px 400px;border:1px solid #24313A;border-radius:14px;overflow:hidden;background:#0D1318;box-shadow:0 30px 80px -20px #000}
+.frame{position:relative;display:grid;grid-template-columns:1040px 400px;border:1px solid #24313A;border-radius:14px;overflow:hidden;background:#0D1318;box-shadow:0 30px 80px -20px #000}
 .bar{grid-column:1/-1;display:flex;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid #24313A}
 .bar i{width:12px;height:12px;border-radius:50%;background:#FF5F57;box-shadow:inset 0 0 0 .5px rgb(0 0 0/.25)}.bar i:nth-child(2){background:#FEBC2E}.bar i:nth-child(3){background:#28C840}
 .bar span{margin-left:10px;flex:1;background:#06090D;border-radius:6px;padding:4px 12px;font:12px GeistMono;color:#93A1AC}
@@ -65,7 +65,7 @@ for (const [i, [panel, title, sub]] of store.entries())
     800,
     `<div class="glow"></div><div style="position:relative;padding:40px 0 0;text-align:center">
       <h1 style="font-size:34px">${title}</h1><p style="font-size:18px;margin-top:8px">${sub}</p>
-      <div style="width:1112px;margin:32px auto 0;zoom:.86">${frame(panel)}</div></div>`,
+      <div style="width:1440px;margin:28px auto 0;zoom:.75">${frame(panel)}</div></div>`,
   );
 
 const card = (panel, zoom) =>
@@ -107,7 +107,7 @@ await render(
   "assets/readme/showcase.png",
   1240,
   900,
-  `<div class="glow"></div><div style="position:relative;padding:44px 64px">${frame("tools")}</div>`,
+  `<div class="glow"></div><div style="position:relative;padding:44px 64px;zoom:.77"><div style="width:1440px">${frame("tools")}</div></div>`,
 );
 await browser.close();
 console.log("Promotional images written to assets/");

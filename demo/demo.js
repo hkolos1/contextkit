@@ -1,17 +1,40 @@
 const inventory = new Map([
   ["A1", { name: "Field notebook", price: 8 }],
   ["B2", { name: "Graph pencil", price: 3 }],
+  ["C3", { name: "Brass sharpener", price: 12 }],
 ]);
 const items = document.querySelector("#items"),
   status = document.querySelector("#status"),
   log = document.querySelector("#log"),
-  toggle = document.querySelector("#toggle");
+  toggle = document.querySelector("#toggle"),
+  cartButton = document.querySelector("#cart"),
+  receipt = document.querySelector("#receipt");
+const cart = new Map();
+const money = (n) => `$${Number(n).toFixed(2)}`;
+const cartTotal = () =>
+  Array.from(cart, ([id, q]) => (inventory.get(id)?.price ?? 0) * q).reduce((a, b) => a + b, 0);
+/** Restarts a CSS animation class on an element. */
+function flash(el, name) {
+  el?.classList.remove(name);
+  void el?.offsetWidth;
+  el?.classList.add(name);
+}
+function renderCart() {
+  const count = Array.from(cart.values()).reduce((a, b) => a + b, 0);
+  cartButton.querySelector("b").textContent = count;
+  cartButton.querySelector("small").textContent = money(cartTotal());
+  if (count) cartButton.dataset.full = "";
+  else delete cartButton.dataset.full;
+  flash(cartButton, "bump");
+}
+const defs = (id, a, b) =>
+  `<defs><linearGradient id="${id}" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>`;
 const art = {
-  A1: '<svg viewBox="0 0 120 90" aria-hidden="true"><rect x="34" y="12" width="52" height="66" rx="4" fill="#1f3a5f"/><rect x="34" y="12" width="8" height="66" fill="#16304f"/><rect x="50" y="26" width="26" height="6" rx="2" fill="#f5efe3"/><path d="M80 12v30l-5-4-5 4V12" fill="#c2410c"/></svg>',
-  B2: '<svg viewBox="0 0 120 90" aria-hidden="true"><g transform="rotate(-32 60 45)"><rect x="18" y="38" width="70" height="14" rx="2" fill="#e8b44a"/><rect x="18" y="38" width="10" height="14" fill="#d4d4d8"/><rect x="12" y="38" width="7" height="14" rx="2" fill="#e88f8f"/><path d="M88 38l16 7-16 7z" fill="#f2d7a6"/><path d="M99 43l5 2-5 2z" fill="#3f3f46"/></g></svg>',
+  A1: `<svg viewBox="0 0 120 90" aria-hidden="true">${defs("a1", "#2563eb", "#22d3ee")}<rect x="36" y="10" width="50" height="70" rx="5" fill="url(#a1)"/><rect x="36" y="10" width="9" height="70" rx="3" fill="#0b1220" opacity=".35"/><rect x="52" y="26" width="24" height="5" rx="2.5" fill="#e0f2fe" opacity=".9"/><rect x="52" y="35" width="16" height="3" rx="1.5" fill="#e0f2fe" opacity=".5"/><path d="M78 10v28l-5-4-5 4V10" fill="#34d399"/></svg>`,
+  B2: `<svg viewBox="0 0 120 90" aria-hidden="true">${defs("b2", "#34d399", "#22d3ee")}<g transform="rotate(-30 60 45)"><rect x="16" y="38" width="72" height="14" rx="3" fill="url(#b2)"/><rect x="16" y="38" width="9" height="14" fill="#94a3b8"/><rect x="10" y="38" width="7" height="14" rx="3" fill="#f472b6"/><path d="M88 38l17 7-17 7z" fill="#e2e8f0"/><path d="M100 43l5 2-5 2z" fill="#0f172a"/></g></svg>`,
+  C3: `<svg viewBox="0 0 120 90" aria-hidden="true">${defs("c3", "#22d3ee", "#3b82f6")}<rect x="40" y="26" width="40" height="38" rx="8" fill="url(#c3)"/><circle cx="60" cy="45" r="9" fill="#0b1220" opacity=".55"/><circle cx="60" cy="45" r="4" fill="#e0f2fe"/><rect x="80" y="38" width="10" height="14" rx="3" fill="#94a3b8"/></svg>`,
 };
-const fallback =
-  '<svg viewBox="0 0 120 90" aria-hidden="true"><rect x="38" y="22" width="44" height="46" rx="6" fill="#d6d3d1"/><path d="M38 34h44" stroke="#a8a29e" stroke-width="3"/></svg>';
+const fallback = `<svg viewBox="0 0 120 90" aria-hidden="true">${defs("x", "#1e293b", "#334155")}<rect x="38" y="22" width="44" height="46" rx="8" fill="url(#x)"/></svg>`;
 function render() {
   items.replaceChildren(
     ...Array.from(inventory, ([id, item]) => {
@@ -27,6 +50,7 @@ function render() {
       const price = document.createElement("b");
       price.textContent = `$${Number(item.price).toFixed(2)}`;
       meta.append(sku, price);
+      li.dataset.id = id;
       li.append(figure, name, meta);
       return li;
     }),
@@ -122,6 +146,64 @@ const definitions = [
       inventory.delete(id);
       render();
       return { deleted: id };
+    },
+  ],
+  [
+    "add_to_cart",
+    "Add a quantity of one inventory item to the shopping cart.",
+    schema({
+      id,
+      quantity: {
+        type: "integer",
+        minimum: 1,
+        maximum: 10,
+        description: "Number of units to add.",
+      },
+    }),
+    write,
+    ({ id, quantity }) => {
+      item(id);
+      cart.set(id, (cart.get(id) ?? 0) + quantity);
+      renderCart();
+      const card = items.querySelector(`[data-id="${id}"]`);
+      card?.style.setProperty("--added", `"+${quantity}"`);
+      flash(card, "added");
+      return { cart: Object.fromEntries(cart), total: cartTotal() };
+    },
+  ],
+  [
+    "checkout",
+    "Pay for everything in the cart and place the order.",
+    schema({
+      payment: {
+        type: "string",
+        enum: ["card", "invoice"],
+        description: "Payment method for the order.",
+      },
+    }),
+    write,
+    ({ payment }) => {
+      if (!cart.size) throw Error("The cart is empty.");
+      const order = {
+        order: `PG-${1040 + Math.floor(Math.random() * 60)}`,
+        payment,
+        items: Array.from(cart, ([id, quantity]) => ({ id, name: item(id).name, quantity })),
+        total: cartTotal(),
+      };
+      receipt.querySelector("[data-order]").textContent = order.order;
+      receipt.querySelector("[data-total]").textContent = money(order.total);
+      receipt.querySelector("[data-lines]").replaceChildren(
+        ...order.items.map((l) => {
+          const li = document.createElement("li");
+          li.textContent = `${l.quantity} × ${l.name}`;
+          return li;
+        }),
+      );
+      cart.clear();
+      renderCart();
+      receipt.hidden = false;
+      flash(receipt, "show");
+      return order;
     },
   ],
   [
