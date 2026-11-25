@@ -1,4 +1,4 @@
-name: Publish Toolpeek
+name: Release
 on:
   push:
     tags: ['v*']
@@ -16,27 +16,26 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      # Lints, tests, packages the versioned ZIP and runs the browser suite against it.
       - uses: ./.github/actions/check-extension
-      - name: Publish verified ZIP
+      # Creates (or refreshes) a draft release. A maintainer reviews and publishes it.
+      - name: Attach the verified ZIP to a draft release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           tag="$GITHUB_REF_NAME"
-          name="toolpeek-${tag}.zip"
-          asset="release/$name"
+          asset="release/toolpeek-${tag}.zip"
           notes="docs/releases/$tag.md"
           test -s "$notes"
-          if gh release view "$tag" --json assets,isDraft > "$RUNNER_TEMP/release.json"; then
-            if jq -e '.isDraft' "$RUNNER_TEMP/release.json" >/dev/null; then
-              gh release upload "$tag" "$asset" --clobber
-              gh release edit "$tag" --title "Toolpeek $tag" --notes-file "$notes" --draft=false
-            else
-              digest="sha256:$(sha256sum "$asset" | cut -d' ' -f1)"
-              jq -e --arg name "$name" --arg digest "$digest" \
-                'any(.assets[]; .name == $name and .digest == $digest)' "$RUNNER_TEMP/release.json"
+          if gh release view "$tag" --json isDraft --jq .isDraft > "$RUNNER_TEMP/draft"; then
+            if [ "$(cat "$RUNNER_TEMP/draft")" != "true" ]; then
+              echo "::error::$tag is already published; refusing to replace its asset."
+              exit 1
             fi
+            gh release upload "$tag" "$asset" --clobber
+            gh release edit "$tag" --title "Toolpeek $tag" --notes-file "$notes"
           else
-            gh release create "$tag" "$asset" --verify-tag --title "Toolpeek $tag" --notes-file "$notes"
+            gh release create "$tag" "$asset" --draft --verify-tag --title "Toolpeek $tag" --notes-file "$notes"
           fi
