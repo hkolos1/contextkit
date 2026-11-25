@@ -18,10 +18,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/hkolos1/toolpeek/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/hkolos1/toolpeek?color=8B5CF6"></a>
+  <a href="https://github.com/hkolos1/toolpeek/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/hkolos1/toolpeek?color=2DD4BF"></a>
   <a href="https://github.com/hkolos1/toolpeek/actions/workflows/ci.yml"><img alt="Extension CI" src="https://img.shields.io/github/actions/workflow/status/hkolos1/toolpeek/ci.yml?branch=main&label=extension"></a>
   <a href="https://github.com/hkolos1/toolpeek/actions/workflows/website.yml"><img alt="Website" src="https://img.shields.io/github/actions/workflow/status/hkolos1/toolpeek/website.yml?branch=main&label=website"></a>
-  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-8B5CF6"></a>
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2DD4BF"></a>
 </p>
 
 <p align="center">
