@@ -93,7 +93,7 @@ npm run build      # or: npm run dev (unminified, source maps)
 npm run demo       # local WebMCP demo at http://127.0.0.1:4178
 ```
 
-Load `dist/` as an unpacked extension and open the demo. Try `get_item_details` with `{"id":"A1"}`.
+Load `dist/` as an unpacked extension and open the demo. Try `get_item_details` with `{"id":"A1"}`. The website at https://toolpeek.web.app also registers five read-only WebMCP tools about Toolpeek (`website/src/app/webmcp.ts`), so you can try the extension there too.
 
 Checks (stop the demo server first; the browser suite starts its own):
 

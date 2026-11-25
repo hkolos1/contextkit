@@ -133,6 +133,20 @@
         </li>
       }
     </ul>
+    <div class="mt-6 flex items-start gap-3 rounded-xl border border-line bg-surface p-5 text-sm text-muted">
+      <tp-icon name="wrench" [size]="18" class="mt-0.5 text-accent" />
+      <p>
+        <span class="text-fg">Try it on this page.</span>
+        This website registers its own read-only WebMCP tools: product info, features, install steps,
+        a privacy summary and section navigation.
+        @if (webmcp().length) {
+          <span class="text-accent">{{ webmcp().length }} tools are registered right now.</span>
+          Open Toolpeek here to inspect and run them.
+        } @else {
+          Open it in Chrome with WebMCP enabled, then open Toolpeek here to inspect and run them.
+        }
+      </p>
+    </div>
     <div class="beam-border mt-6 flex items-start gap-3 rounded-xl border border-line p-5 text-sm text-muted">
       <tp-icon name="lock" [size]="18" class="mt-0.5 text-accent" />
       <p>

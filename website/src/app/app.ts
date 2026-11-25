@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+} from "@angular/core";
 import { Meta } from "@angular/platform-browser";
 import {
   ActivatedRoute,
@@ -10,6 +15,7 @@ import {
 import { filter } from "rxjs";
 import { Icon } from "./icon";
 import { installHref, site } from "./site";
+import { registerSiteTools } from "./webmcp";
 
 const description =
   "Toolpeek is an open-source Chrome extension for discovering, inspecting and running the WebMCP tools a website exposes to AI agents.";
@@ -28,7 +34,9 @@ export class App {
   constructor() {
     const meta = inject(Meta);
     const route = inject(ActivatedRoute);
-    inject(Router)
+    const router = inject(Router);
+    afterNextRender(() => void registerSiteTools(router));
+    router
       .events.pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((e) => {
         let r = route;

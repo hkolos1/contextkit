@@ -51,7 +51,7 @@ Exporting tools, activity or audit reports saves a file to the location you choo
 
 ## Website
 
-https://toolpeek.web.app is a static site served by Firebase Hosting (Google). It uses no cookies, analytics or third-party scripts, and serves its fonts itself. Like any web host, Firebase Hosting may process request data such as IP addresses and user agents to deliver and protect the service.
+https://toolpeek.web.app is a static site served by Firebase Hosting (Google). It uses no cookies, analytics or third-party scripts, and serves its fonts itself. In browsers with WebMCP it registers a few read-only tools that return public information about Toolpeek; they run in your browser and send nothing anywhere. Like any web host, Firebase Hosting may process request data such as IP addresses and user agents to deliver and protect the service.
 
 ## Chrome Web Store User Data Policy
 
