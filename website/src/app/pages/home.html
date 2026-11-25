@@ -78,6 +78,22 @@
         <span class="size-3 rounded-full bg-[#28c840] shadow-[inset_0_0_0_0.5px_rgb(0_0_0/0.25)]"></span>
 
       </div>
+      @if (active() === 0) {
+        <video
+          class="block aspect-[1440/760] w-full bg-bg"
+          src="/video/demo.mp4"
+          poster="/video/demo-poster.jpg"
+          width="1440"
+          height="760"
+          [muted]="true"
+          [attr.autoplay]="reduced ? null : ''"
+          [attr.controls]="reduced ? '' : null"
+          loop
+          playsinline
+          preload="metadata"
+          [attr.aria-label]="views[0].alt"
+        ></video>
+      } @else {
       <div class="grid md:grid-cols-[1fr_400px]">
         <img
           src="/screenshots/demo-site.webp"
@@ -89,6 +105,7 @@
         />
         <div class="relative border-line md:border-l" style="aspect-ratio: 400 / 760">
           @for (v of views; track v.id; let i = $index) {
+            @if (i) {
             <img
               [src]="'/screenshots/' + v.id + '.webp'"
               [alt]="v.alt"
@@ -99,12 +116,14 @@
               class="absolute inset-0 h-full w-full transition-opacity duration-500"
               [class.opacity-0]="active() !== i"
             />
+            }
           }
         </div>
       </div>
+      }
       <figcaption class="sr-only">
-        Real screenshots of Toolpeek in Chrome's side panel inspecting the demo page included in the
-        repository.
+        A real recording and real screenshots of Toolpeek in Chrome's side panel, working with the
+        demo store included in the repository.
       </figcaption>
     </figure>
   </div>

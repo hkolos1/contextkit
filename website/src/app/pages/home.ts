@@ -1,8 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
-  inject,
   signal,
 } from "@angular/core";
 import { Globe } from "../globe";
@@ -28,6 +26,11 @@ export default class Home {
   readonly storeReady = !!site.chromeWebStore;
 
   readonly views: View[] = [
+    {
+      id: "demo",
+      label: "Live demo",
+      alt: "Screen recording: Toolpeek's Playground adds two notebooks and a sharpener to the demo store's cart, then pays; the store shows the order confirmation.",
+    },
     {
       id: "tools",
       label: "Discover",
@@ -86,20 +89,10 @@ export default class Home {
     }
   }
 
-  private paused = false;
-
-  constructor() {
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-    const timer = setInterval(() => {
-      if (!this.paused && document.visibilityState === "visible")
-        this.active.update((i) => (i + 1) % this.views.length);
-    }, 5000);
-    inject(DestroyRef).onDestroy(() => clearInterval(timer));
-  }
+  /** The recording plays only when motion is welcome; otherwise it shows controls. */
+  readonly reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   show(i: number) {
-    this.paused = true;
     this.active.set(i);
   }
 
