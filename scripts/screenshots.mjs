@@ -31,7 +31,8 @@ try {
   const id = new URL(worker.url()).host;
   const panel = context.pages()[0];
   const site = await context.newPage();
-  await site.setViewportSize({ width: 880, height: 760 });
+  // 712px wide: the site column next to the 400px panel on the website showcase.
+  await site.setViewportSize({ width: 712, height: 760 });
   await site.goto("http://127.0.0.1:4178");
   await site.bringToFront();
   // Grant activeTab the way a toolbar click does.
