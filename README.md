@@ -1,27 +1,23 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="brand/wordmark-dark.svg">
-    <img src="brand/wordmark-light.svg" alt="Toolpeek" height="48">
-  </picture>
+  <img src="assets/readme/banner.png" width="880" alt="Toolpeek: See what AI agents see.">
 </p>
 
 <p align="center">
-  <b>See what AI agents see.</b><br>
   An open-source browser extension for discovering, inspecting, and interacting with WebMCP tools directly from your browser.
 </p>
 
 <p align="center">
-  <a href="https://toolpeek.web.app">Website</a> ·
-  <a href="https://github.com/hkolos1/toolpeek/releases/latest">Download</a> ·
-  <a href="#install">Install</a> ·
-  <a href="PRIVACY.md">Privacy</a>
+  <a href="https://toolpeek.web.app"><img alt="Website" src="https://img.shields.io/badge/Website-toolpeek.web.app-2DD4BF?style=for-the-badge&labelColor=0D1318&logo=googlechrome&logoColor=2DD4BF"></a>
+  <a href="https://github.com/hkolos1/toolpeek/releases/latest"><img alt="Download the latest release" src="https://img.shields.io/github/v/release/hkolos1/toolpeek?style=for-the-badge&label=Download&labelColor=0D1318&color=22D3EE&logo=github&logoColor=22D3EE"></a>
+  <a href="#install"><img alt="Install guide" src="https://img.shields.io/badge/Install-in_60_seconds-3B82F6?style=for-the-badge&labelColor=0D1318&logo=googlechrome&logoColor=3B82F6"></a>
+  <a href="PRIVACY.md"><img alt="Privacy" src="https://img.shields.io/badge/Privacy-no_tracking-34D399?style=for-the-badge&labelColor=0D1318&logo=letsencrypt&logoColor=34D399"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/hkolos1/toolpeek/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/hkolos1/toolpeek?color=2DD4BF"></a>
-  <a href="https://github.com/hkolos1/toolpeek/actions/workflows/ci.yml"><img alt="Extension CI" src="https://img.shields.io/github/actions/workflow/status/hkolos1/toolpeek/ci.yml?branch=main&label=extension"></a>
-  <a href="https://github.com/hkolos1/toolpeek/actions/workflows/website.yml"><img alt="Website" src="https://img.shields.io/github/actions/workflow/status/hkolos1/toolpeek/website.yml?branch=main&label=website"></a>
-  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2DD4BF"></a>
+  <a href="https://github.com/hkolos1/toolpeek/actions/workflows/ci.yml"><img alt="Extension CI" src="https://img.shields.io/github/actions/workflow/status/hkolos1/toolpeek/ci.yml?branch=main&label=extension&labelColor=0D1318"></a>
+  <a href="https://github.com/hkolos1/toolpeek/actions/workflows/website.yml"><img alt="Website CI" src="https://img.shields.io/github/actions/workflow/status/hkolos1/toolpeek/website.yml?branch=main&label=website&labelColor=0D1318"></a>
+  <img alt="Chrome Manifest V3" src="https://img.shields.io/badge/Chrome-Manifest_V3-2DD4BF?labelColor=0D1318">
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2DD4BF?labelColor=0D1318"></a>
 </p>
 
 <p align="center">
@@ -41,6 +37,14 @@ Websites can register **WebMCP tools**: typed functions that AI agents call inst
 | **Audit** | Specification issues, authoring recommendations and heuristics, exported as JSON or a standalone HTML report. |
 
 Also: system, dark and light themes, `/` to search tools, <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Enter</kbd> to run the selected tool.
+
+## Built with
+
+<p>
+  <img src="assets/readme/stack.svg" height="48" alt="Angular, TypeScript, Tailwind CSS, Node.js, Vitest">
+</p>
+
+Angular 22 standalone components (zoneless, signals) in a Manifest V3 extension, Tailwind CSS 4, esbuild, Vitest for unit tests, Playwright driving real Chrome for Testing for end-to-end tests and Biome for linting. The website is Angular 22 + Tailwind CSS on Firebase Hosting.
 
 ## Install
 

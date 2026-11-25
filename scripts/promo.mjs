@@ -109,5 +109,15 @@ await render(
   900,
   `<div class="glow"></div><div style="position:relative;padding:44px 64px;zoom:.77"><div style="width:1440px">${frame("tools")}</div></div>`,
 );
+// README banner: carries its own dark background so it reads on GitHub's light and dark themes.
+await render(
+  "assets/readme/banner.png",
+  1760,
+  440,
+  `<div class="glow" style="background:radial-gradient(ellipse 45% 70% at 25% 0%,rgb(52 211 153/.22),transparent 70%),radial-gradient(ellipse 45% 70% at 55% -10%,rgb(34 211 238/.2),transparent 70%),radial-gradient(ellipse 45% 70% at 85% 0%,rgb(59 130 246/.22),transparent 70%)"></div>
+  <div style="position:relative;height:100%;display:grid;place-content:center;justify-items:center;gap:30px">
+    <div style="width:640px">${wordmark}</div>
+    <p style="font-size:40px;margin:0">See what AI agents see.</p></div>`,
+);
 await browser.close();
 console.log("Promotional images written to assets/");
