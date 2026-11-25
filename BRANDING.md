@@ -53,7 +53,7 @@ Status colors (success, warning, danger) are for state only, never decoration.
 - Spacing on a 4px grid. Radii: 6px controls, 8px cards, 12px large surfaces.
 - Borders over shadows. Shadows only on floating layers (dialogs, menus, the website showcase).
 - Icons: [Lucide](https://lucide.dev), 15–18px, 2px stroke, tinted with `currentColor`.
-- Motion: short (150–600ms), ease-out, used to show change. Ambient website motion (aurora, beams, globe, the three.js constellation) stays slow and subtle, and pauses off-screen. Respect `prefers-reduced-motion`.
+- Motion: short (150–600ms), ease-out, used to show change. Ambient website motion (aurora, beams, globe) stays slow and subtle, and pauses off-screen. Respect `prefers-reduced-motion`.
 - Avoid heavy gradients, glassmorphism, decorative badges and stock illustrations. Show the real product instead.
 
 ## Voice

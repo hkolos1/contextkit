@@ -5,7 +5,6 @@ import {
   inject,
   signal,
 } from "@angular/core";
-import { Constellation } from "../constellation";
 import { Globe } from "../globe";
 import { Icon } from "../icon";
 import { features, installHref, site } from "../site";
@@ -19,7 +18,7 @@ interface View {
 
 @Component({
   selector: "tp-home",
-  imports: [Icon, Globe, Constellation],
+  imports: [Icon, Globe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./home.html",
 })
@@ -69,11 +68,23 @@ export default class Home {
     },
   ];
 
-  readonly sourceSteps = `git clone \\
-  ${site.repo}
-cd toolpeek
-npm ci
-npm run build`;
+  readonly commands = [
+    `git clone ${site.repo}`,
+    "cd toolpeek",
+    "npm ci",
+    "npm run build",
+  ];
+  readonly copied = signal(false);
+
+  async copyCommands() {
+    try {
+      await navigator.clipboard.writeText(this.commands.join("\n"));
+      this.copied.set(true);
+      setTimeout(() => this.copied.set(false), 2000);
+    } catch {
+      // Clipboard can be blocked; the commands stay selectable.
+    }
+  }
 
   private paused = false;
 
