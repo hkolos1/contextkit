@@ -9,8 +9,8 @@ import {
 } from "@angular/core";
 
 /**
- * Rotating dotted sphere rising like a horizon behind the hero, echoing the
- * logo (an eye peeking over an edge). Some dots are "tools" that pulse, and
+ * Rotating dotted sphere rising like a horizon behind the hero, coloured like
+ * an aurora (green → cyan → blue). Some dots are "tools" that pulse, and
  * arcs connect them the way an agent hops between tools.
  * Canvas 2D, ~2.4k points; pauses off-screen and is static for reduced motion.
  */
@@ -64,6 +64,19 @@ export class Globe {
       cy = radius + 24;
     };
 
+    // Aurora colour across the sphere: green (left) → cyan → blue (right).
+    const stops = [
+      [52, 211, 153],
+      [34, 211, 238],
+      [59, 130, 246],
+    ];
+    const aurora = (x: number) => {
+      const t = Math.min(1, Math.max(0, (x + 1) / 2)) * 2;
+      const [a, b] = t < 1 ? [stops[0], stops[1]] : [stops[1], stops[2]];
+      const f = t < 1 ? t : t - 1;
+      return a.map((v, i) => Math.round(v + (b[i] - v) * f)).join(",");
+    };
+
     const tilt = 0.32;
     const project = ([x, y, z]: [number, number, number], angle: number) => {
       const cos = Math.cos(angle);
@@ -81,9 +94,9 @@ export class Globe {
 
       // Atmosphere rim.
       const rim = ctx.createRadialGradient(cx, cy, radius * 0.92, cx, cy, radius * 1.12);
-      rim.addColorStop(0, "rgba(139,92,246,0)");
-      rim.addColorStop(0.45, "rgba(139,92,246,0.3)");
-      rim.addColorStop(1, "rgba(139,92,246,0)");
+      rim.addColorStop(0, "rgba(34,211,238,0)");
+      rim.addColorStop(0.45, "rgba(45,212,191,0.28)");
+      rim.addColorStop(1, "rgba(59,130,246,0)");
       ctx.fillStyle = rim;
       ctx.beginPath();
       ctx.arc(cx, cy, radius * 1.12, 0, Math.PI * 2);
@@ -93,7 +106,7 @@ export class Globe {
         const q = project(p, angle);
         if (q.z < 0) continue;
         const size = 1.1 + q.z * 1.4;
-        ctx.fillStyle = `rgba(196,181,253,${0.16 + q.z * 0.7})`;
+        ctx.fillStyle = `rgba(${aurora((q.x - cx) / radius)},${0.16 + q.z * 0.7})`;
         ctx.fillRect(q.x - size / 2, q.y - size / 2, size, size);
       }
 
@@ -102,11 +115,11 @@ export class Globe {
         const q = project(n, angle);
         if (q.z < 0.15) continue;
         const pulse = 0.5 + 0.5 * Math.sin(time * 0.003 + i);
-        ctx.fillStyle = `rgba(139,92,246,${0.25 * pulse * q.z})`;
+        ctx.fillStyle = `rgba(34,211,238,${0.28 * pulse * q.z})`;
         ctx.beginPath();
         ctx.arc(q.x, q.y, 4 + pulse * 4, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = `rgba(250,250,250,${0.5 + 0.5 * q.z})`;
+        ctx.fillStyle = `rgba(242,246,248,${0.5 + 0.5 * q.z})`;
         ctx.beginPath();
         ctx.arc(q.x, q.y, 1.6, 0, Math.PI * 2);
         ctx.fill();
@@ -135,7 +148,7 @@ export class Globe {
         const len = Math.hypot(dx, dy) || 1;
         const kx = mx + (dx / len) * lift;
         const ky = my + (dy / len) * lift;
-        ctx.strokeStyle = `rgba(196,181,253,${0.75 * fade})`;
+        ctx.strokeStyle = `rgba(110,231,183,${0.75 * fade})`;
         ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);

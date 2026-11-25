@@ -15,15 +15,19 @@
 
 /* Toolpeek tokens (brand/tokens.css). The website is dark only. */
 @theme {
-  --color-bg: #09090f;
-  --color-surface: #15151f;
-  --color-raised: #1e1e2b;
-  --color-line: #30303d;
-  --color-fg: #fafafa;
-  --color-muted: #a1a1aa;
-  --color-primary: #8b5cf6;
-  --color-primary-fill: #7c3aed;
-  --color-accent: #c4b5fd;
+  --color-bg: #06090d;
+  --color-surface: #0d1318;
+  --color-raised: #151e25;
+  --color-line: #24313a;
+  --color-fg: #f2f6f8;
+  --color-muted: #93a1ac;
+  --color-primary: #2dd4bf;
+  --color-primary-fill: #2dd4bf;
+  --color-on-primary: #04161a;
+  --color-accent: #67e8f9;
+  --color-aurora-green: #34d399;
+  --color-aurora-cyan: #22d3ee;
+  --color-aurora-blue: #3b82f6;
   --font-sans: Geist, ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
@@ -39,7 +43,7 @@ body {
   font-family: var(--font-sans);
 }
 ::selection {
-  background: rgb(139 92 246 / 0.4);
+  background: rgb(45 212 191 / 0.35);
 }
 :focus-visible {
   outline: 2px solid var(--color-primary);
@@ -64,7 +68,53 @@ body {
   }
 }
 
-/* Feature grid: violet beams travel along the 1px gaps between cells and the
+/* Hero aurora: three soft colour bands drifting slowly. */
+.aurora > span {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.26;
+  animation: drift 18s ease-in-out infinite alternate;
+}
+.aurora > span:nth-child(1) {
+  left: 8%;
+  top: -120px;
+  width: 45%;
+  height: 300px;
+  background: var(--color-aurora-green);
+}
+.aurora > span:nth-child(2) {
+  left: 32%;
+  top: -160px;
+  width: 40%;
+  height: 320px;
+  background: var(--color-aurora-cyan);
+  animation-duration: 22s;
+  animation-direction: alternate-reverse;
+}
+.aurora > span:nth-child(3) {
+  right: 6%;
+  top: -130px;
+  width: 42%;
+  height: 300px;
+  background: var(--color-aurora-blue);
+  animation-duration: 26s;
+}
+@keyframes drift {
+  from {
+    transform: translate3d(-6%, 0, 0) rotate(-4deg) scaleY(0.85);
+  }
+  to {
+    transform: translate3d(6%, 30px, 0) rotate(4deg) scaleY(1.1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora > span {
+    animation: none;
+  }
+}
+
+/* Feature grid: aurora beams (green, cyan, blue) travel along the 1px gaps between cells and the
    1px padding that forms the outline. Cells cover everything else.
    Each beam is a 360x140 (or 140x360) spot. To centre a spot of size S on a
    fraction p of the width, position it at calc(p * 100% + S*p - S/2). */
@@ -98,7 +148,7 @@ body {
 }
 @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
   .lasers {
-    background-image: radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent);
+    background-image: radial-gradient(closest-side, #fff, #fff 18%, #6ee7b7 42%, rgb(52 211 153 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #a5f3fc 42%, rgb(34 211 238 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #93c5fd 42%, rgb(59 130 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #6ee7b7 42%, rgb(52 211 153 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #a5f3fc 42%, rgb(34 211 238 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #a5f3fc 42%, rgb(34 211 238 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #93c5fd 42%, rgb(59 130 246 / 0.85) 70%, transparent);
     background-size:
       360px 140px, 360px 140px, 360px 140px,
       140px 360px, 140px 360px, 140px 360px, 140px 360px;
