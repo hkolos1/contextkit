@@ -5,6 +5,7 @@ import {
   inject,
   signal,
 } from "@angular/core";
+import { Globe } from "../globe";
 import { Icon } from "../icon";
 import { installHref, site } from "../site";
 
@@ -16,7 +17,7 @@ interface View {
 
 @Component({
   selector: "tp-home",
-  imports: [Icon],
+  imports: [Icon, Globe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./home.html",
 })
