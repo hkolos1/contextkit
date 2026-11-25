@@ -61,7 +61,8 @@ export class Globe {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       radius = width * 0.42;
       cx = width / 2;
-      cy = radius + 24;
+      // Leave room above the sphere for the atmosphere rim (1.12 × radius).
+      cy = radius * 1.14 + 8;
     };
 
     // Aurora colour across the sphere: green (left) → cyan → blue (right).
