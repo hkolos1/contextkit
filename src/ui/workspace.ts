@@ -1,4 +1,10 @@
-import { Component, computed, signal } from "@angular/core";
+import {
+  Component,
+  computed,
+  signal,
+  viewChild,
+  type ElementRef,
+} from "@angular/core";
 import { Popup } from "./popup";
 import { Field } from "./field";
 import { Agent } from "./agent";
@@ -15,18 +21,26 @@ import {
   type Theme,
 } from "../core/model";
 import { audit } from "../core/audit";
-import { emptySchema, initial, validate } from "../core/schema";
+import { emptySchema, initial, parameters, validate } from "../core/schema";
 import { download, report } from "./export";
 @Component({
   selector: "tp-app",
   imports: [Field, Popup, Agent],
   templateUrl: "workspace.html",
+  host: { "(document:keydown)": "shortcut($event)" },
 })
 export class Workspace {
   readonly version = chrome.runtime.getManifest().version;
   popup = document.body.classList.contains("popup");
   tabs = ["Tools", "Playground", "Agent", "Activity", "Audit"];
   icons = ["wrench", "terminal", "bot", "activity", "shield-check"];
+  themes = [
+    { id: "system", label: "System", icon: "monitor" },
+    { id: "dark", label: "Dark", icon: "moon" },
+    { id: "light", label: "Light", icon: "sun" },
+  ];
+  query = viewChild<ElementRef<HTMLInputElement>>("query");
+  confirmation = viewChild<ElementRef<HTMLDialogElement>>("confirmation");
   section = signal("Tools");
   settings = signal(false);
   snap = signal<Snapshot | null>(null);
@@ -94,6 +108,7 @@ export class Workspace {
   );
   pretty = pretty;
   safety = safety;
+  parameters = parameters;
   download = download;
   windowId = -1;
   private revision = 0;
@@ -275,10 +290,35 @@ export class Workspace {
       (e) => this.notice.set(errorMessage(e)),
     );
   }
+  /** "/" focuses tool search; Ctrl/⌘+Enter runs the selected tool. */
+  shortcut(e: KeyboardEvent) {
+    const typing = (e.target as HTMLElement | null)?.closest?.(
+      "input, textarea, select, [contenteditable]",
+    );
+    if (e.key === "/" && !typing && this.section() === "Tools") {
+      e.preventDefault();
+      this.query()?.nativeElement.focus();
+    } else if (
+      e.key === "Enter" &&
+      (e.metaKey || e.ctrlKey) &&
+      this.section() === "Playground" &&
+      !this.popup
+    ) {
+      const dialog = this.confirmation()?.nativeElement;
+      if (dialog && !dialog.open) {
+        e.preventDefault();
+        this.prepare(dialog);
+      }
+    }
+  }
   async copy(v: unknown) {
     try {
       await navigator.clipboard.writeText(pretty(v));
-      this.notice.set("Copied to clipboard.");
+      const done = "Copied to clipboard.";
+      this.notice.set(done);
+      setTimeout(() => {
+        if (this.notice() === done) this.notice.set("");
+      }, 2500);
     } catch (e) {
       this.notice.set(errorMessage(e));
     }

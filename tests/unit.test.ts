@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { adapter, type NativeTool } from "../src/extension/adapter";
 import { parseTools, bounded, safety, type Entry } from "../src/core/model";
-import { inspectSchema, validate } from "../src/core/schema";
+import { inspectSchema, parameters, validate } from "../src/core/schema";
 import { audit } from "../src/core/audit";
 import { append } from "../src/core/history";
 import { isCommand, trustedUI, unwrap } from "../src/core/bridge";
@@ -293,4 +293,23 @@ describe("agent providers", () => {
     expect(transient(429, "limit: 0, model: x")).toBe(false);
     expect(transient(400, "bad request")).toBe(false);
   });
+});
+
+it("summarizes top-level parameters", () => {
+  expect(
+    parameters({
+      type: "object",
+      required: ["id"],
+      properties: {
+        id: { type: "string", description: "Item id." },
+        currency: { enum: ["USD", "EUR"] },
+        lines: { type: ["array", "null"] },
+      },
+    }),
+  ).toEqual([
+    { name: "id", type: "string", required: true, description: "Item id." },
+    { name: "currency", type: "enum", required: false, description: "" },
+    { name: "lines", type: "array | null", required: false, description: "" },
+  ]);
+  expect(parameters(undefined)).toEqual([]);
 });

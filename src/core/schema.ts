@@ -171,3 +171,23 @@ export function initial(schema: unknown): unknown {
       return "";
   }
 }
+
+/** Top-level parameters of a tool's input schema, for a quick summary. */
+export function parameters(schema: unknown) {
+  const s = object(schema) ? schema : {};
+  const props = object(s.properties) ? s.properties : {};
+  const required = Array.isArray(s.required) ? s.required : [];
+  return Object.entries(props).map(([name, p]) => {
+    const d = object(p) ? p : {};
+    return {
+      name,
+      type: Array.isArray(d.enum)
+        ? "enum"
+        : Array.isArray(d.type)
+          ? d.type.join(" | ")
+          : String(d.type ?? (d.properties ? "object" : "any")),
+      required: required.includes(name),
+      description: typeof d.description === "string" ? d.description : "",
+    };
+  });
+}

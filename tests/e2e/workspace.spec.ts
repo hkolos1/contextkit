@@ -67,8 +67,8 @@ test("native discovery, validation, execution, confirmation, lifecycle and navig
     const row = panel.locator("details").filter({
       has: panel.locator("summary code", { hasText: "get_item_details" }),
     });
-    await row.locator("summary").click();
-    await row.getByText("Open playground").click();
+    await row.locator(":scope > summary").click();
+    await row.getByText("Open in Playground").click();
     await panel.getByLabel("id", { exact: true }).fill("A1");
     await panel.getByRole("button", { name: "Run tool" }).click();
     await expect(panel.locator(".response pre")).toContainText(
@@ -99,7 +99,7 @@ test("native discovery, validation, execution, confirmation, lifecycle and navig
       .getByRole("dialog")
       .getByText("Confirm and run", { exact: true })
       .click();
-    await expect(panel.locator(".response h2")).toContainText("Error");
+    await expect(panel.locator(".response .tag")).toContainText("Error");
     await panel.getByRole("button", { name: "Activity", exact: true }).click();
     await expect(
       panel.locator("summary").filter({ hasText: "delete_item" }),
@@ -122,7 +122,7 @@ test("unsupported browser, offline inventory, audit export and preferences", asy
   try {
     const { panel } = w;
     await expect(
-      panel.getByText("WebMCP inspection unavailable"),
+      panel.getByText("No WebMCP tools on this page"),
     ).toBeVisible();
     await panel.locator("input[type=file]").setInputFiles({
       name: "offline.json",
@@ -153,7 +153,8 @@ test("unsupported browser, offline inventory, audit export and preferences", asy
       () => chrome.runtime.getManifest().version,
     );
     await expect(panel.getByText(`Toolpeek v${version}`)).toBeVisible();
-    await panel.getByLabel("Appearance").selectOption("dark");
+    await panel.locator(".segmented label", { hasText: "Dark" }).click();
+    await expect(panel.getByRole("radio", { name: "Dark" })).toBeChecked();
     await expect(panel.locator("html")).toHaveAttribute("data-theme", "dark");
     await panel.getByLabel("Keep activity").check();
     await expect
@@ -304,7 +305,7 @@ test("dropdown menus follow the panel theme and support keyboard selection", asy
         await filter.evaluate(
           (el) => getComputedStyle(el, "::picker(select)").backgroundColor,
         ),
-      ).toBe(theme === "light" ? "rgb(255, 255, 255)" : "rgb(17, 20, 29)");
+      ).toBe(theme === "light" ? "rgb(255, 255, 255)" : "rgb(21, 21, 31)");
       await panel.keyboard.press("Escape");
     }
     await filter.focus();

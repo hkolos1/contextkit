@@ -51,6 +51,7 @@ export class Agent {
   catalog = signal<Record<string, string[]>>({ anthropic: CLAUDE_MODELS });
   listError = signal("");
   editing = signal(false);
+  reveal = signal(false);
   prompt = signal("");
   steps = signal<Step[]>([]);
   busy = signal(false);

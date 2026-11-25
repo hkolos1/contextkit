@@ -49,15 +49,29 @@
     >
     <label
       >API key
-      <input
-        #keyInput
-        type="password"
+      <span class="secret"
+        ><input
+          #keyInput
+          [type]="reveal() ? 'text' : 'password'"
         autocomplete="off"
         spellcheck="false"
         [placeholder]="info().placeholder"
         [value]="key()"
-        (keydown.enter)="saveKey(keyInput.value)"
-    /></label>
+          (keydown.enter)="saveKey(keyInput.value)" /><button
+          type="button"
+          class="icon"
+          [attr.aria-label]="reveal() ? 'Hide API key' : 'Show API key'"
+          [title]="reveal() ? 'Hide API key' : 'Show API key'"
+          [attr.aria-pressed]="reveal()"
+          (click)="reveal.set(!reveal())"
+        >
+          <i
+            [style.--icon]="
+              reveal() ? 'url(icons/eye-off.svg)' : 'url(icons/eye.svg)'
+            "
+          ></i></button
+      ></span>
+    </label>
     @if (key()) {
       <label
         >Model
