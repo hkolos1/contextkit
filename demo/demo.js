@@ -10,7 +10,13 @@ function render() {
   items.replaceChildren(
     ...Array.from(inventory, ([id, item]) => {
       const li = document.createElement("li");
-      li.textContent = `${id} · ${item.name} · $${item.price}`;
+      const sku = document.createElement("code");
+      const name = document.createElement("span");
+      const price = document.createElement("span");
+      sku.textContent = id;
+      name.textContent = item.name;
+      price.textContent = `$${item.price.toFixed(2)}`;
+      li.append(sku, name, price);
       return li;
     }),
   );
@@ -151,7 +157,8 @@ if (typeof api?.registerTool === "function") {
     if (def[0] === "execution_error") controller = new AbortController();
     await register(def, controller ? { signal: controller.signal } : undefined);
   }
-  status.textContent = "Registration requests complete.";
+  status.textContent = `${definitions.length} tools registered`;
+  status.dataset.ok = "";
   toggle.disabled = false;
   toggle.onclick = async () => {
     if (controller) {
@@ -166,4 +173,4 @@ if (typeof api?.registerTool === "function") {
   };
 } else
   status.textContent =
-    "Native WebMCP registration unavailable. Enable the Chrome testing flag and relaunch.";
+    "WebMCP unavailable. Enable the Chrome testing flag and relaunch.";

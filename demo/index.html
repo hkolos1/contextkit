@@ -1,1 +1,55 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Toolpeek • Inventory lab</title><style>body{max-width:48rem;margin:8vh auto;padding:1rem;background:#0a1015;color:#f2f6f8;font:16px/1.6 system-ui}code,pre{color:#67e8f9}button,a{color:inherit}button{background:#151e25;border:1px solid #2c3b45;border-radius:6px;padding:.5rem .75rem}pre{white-space:pre-wrap}li{margin:.4rem 0}</style><h1>Inventory lab</h1><p>Use Toolpeek to query and edit this tab’s in-memory inventory. Reloading restores the two sample items.</p><p id="status" role="status">Checking WebMCP…</p><ul id="items"></ul><button type="button" id="toggle" disabled>Remove error tool</button> <a href="empty.html">Open empty inventory</a><h2>Registration log</h2><pre id="log"></pre><script type="module" src="demo.js"></script></html>
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Inventory Lab · Toolpeek demo</title>
+<style>
+  :root { color-scheme: dark; --bg: #0b0f14; --card: #111820; --line: #1f2a35; --text: #e6edf3; --muted: #8b98a5; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 28px; border-bottom: 1px solid var(--line); }
+  .mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: #e6edf3; color: #0b0f14; font-weight: 700; font-size: 13px; }
+  header b { font-size: 15px; }
+  header small { color: var(--muted); }
+  #status { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 12px; }
+  #status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+  #status[data-ok]::before { background: #3fb950; box-shadow: 0 0 0 3px rgb(63 185 80 / .18); }
+  main { max-width: 760px; padding: 28px; }
+  h1 { margin: 0; font-size: 22px; letter-spacing: -.01em; }
+  .lead { margin: 6px 0 24px; color: var(--muted); }
+  section { border: 1px solid var(--line); border-radius: 10px; background: var(--card); margin-bottom: 20px; overflow: hidden; }
+  section > h2 { margin: 0; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--muted); display: flex; justify-content: space-between; }
+  #items { list-style: none; margin: 0; padding: 0; }
+  #items li { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  #items li:last-child { border-bottom: 0; }
+  #items code { justify-self: start; padding: 1px 8px; border-radius: 6px; background: #1a2430; color: var(--muted); font: 12px ui-monospace, SFMono-Regular, monospace; }
+  #items li span:last-child { font-variant-numeric: tabular-nums; }
+  .actions { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-top: 1px solid var(--line); }
+  button { font: inherit; color: var(--text); background: #1a2430; border: 1px solid #2b3846; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  a { color: var(--muted); font-size: 13px; }
+  #log { margin: 0; padding: 12px 16px; font: 12.5px/1.8 ui-monospace, SFMono-Regular, monospace; color: var(--muted); white-space: pre-wrap; }
+</style>
+<header>
+  <span class="mark" aria-hidden="true">IL</span>
+  <b>Inventory Lab</b><small>Toolpeek demo store</small>
+  <span id="status" role="status">Checking WebMCP…</span>
+</header>
+<main>
+  <h1>Inventory</h1>
+  <p class="lead">This page registers WebMCP tools for its in-memory inventory. Use Toolpeek to query and edit it. Reloading restores the sample items.</p>
+  <section aria-labelledby="stock">
+    <h2 id="stock">Stock <span>SKU · Item · Price</span></h2>
+    <ul id="items"></ul>
+    <div class="actions">
+      <button type="button" id="toggle" disabled>Remove error tool</button>
+      <a href="empty.html">Open empty inventory</a>
+    </div>
+  </section>
+  <section aria-labelledby="registrations">
+    <h2 id="registrations">WebMCP registrations</h2>
+    <pre id="log"></pre>
+  </section>
+</main>
+<script type="module" src="demo.js"></script>
+</html>

@@ -23,7 +23,7 @@ body{background:#06090D;color:#F2F6F8;font-family:Geist,sans-serif;overflow:hidd
 .glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 45% at 25% -5%,rgb(52 211 153/.20),transparent 70%),radial-gradient(ellipse 55% 45% at 60% -10%,rgb(34 211 238/.18),transparent 70%),radial-gradient(ellipse 50% 40% at 90% 0%,rgb(59 130 246/.18),transparent 70%)}
 .frame{position:relative;display:grid;grid-template-columns:712px 400px;border:1px solid #24313A;border-radius:14px;overflow:hidden;background:#0D1318;box-shadow:0 30px 80px -20px #000}
 .bar{grid-column:1/-1;display:flex;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid #24313A}
-.bar i{width:11px;height:11px;border-radius:50%;background:#24313A}
+.bar i{width:12px;height:12px;border-radius:50%;background:#FF5F57;box-shadow:inset 0 0 0 .5px rgb(0 0 0/.25)}.bar i:nth-child(2){background:#FEBC2E}.bar i:nth-child(3){background:#28C840}
 .bar span{margin-left:10px;flex:1;background:#06090D;border-radius:6px;padding:4px 12px;font:12px GeistMono;color:#93A1AC}
 .frame img{display:block;width:100%;height:760px}
 .frame img+img{border-left:1px solid #24313A}
