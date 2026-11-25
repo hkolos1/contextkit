@@ -64,6 +64,48 @@ body {
   }
 }
 
+/* Feature grid: violet light travels through the 1px gaps between cells.
+   The cells cover the background, so only the grid lines show the beams.
+   Positions are exact for the 3x2 desktop grid: a spot of size S at
+   calc(p% + offset) is centred on p of the width when offset = S*p - S/2. */
+.lasers {
+  background-color: var(--color-line);
+}
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  .lasers {
+    background-image:
+      radial-gradient(closest-side, #fff, rgb(196 181 253) 25%, rgb(139 92 246 / 0.5) 60%, transparent),
+      radial-gradient(closest-side, #fff, rgb(196 181 253) 25%, rgb(139 92 246 / 0.5) 60%, transparent);
+    background-size:
+      360px 140px,
+      140px 360px;
+    background-repeat: no-repeat;
+    animation: lasers 10s linear infinite;
+  }
+}
+@keyframes lasers {
+  0% {
+    background-position:
+      -360px 50%,
+      calc(33.333% - 23.33px) -360px;
+  }
+  50% {
+    background-position:
+      calc(100% + 360px) 50%,
+      calc(33.333% - 23.33px) calc(100% + 360px);
+  }
+  50.01% {
+    background-position:
+      calc(100% + 360px) 50%,
+      calc(66.667% + 23.33px) -360px;
+  }
+  100% {
+    background-position:
+      -360px 50%,
+      calc(66.667% + 23.33px) calc(100% + 360px);
+  }
+}
+
 /* Long-form pages (privacy policy). */
 .prose {
   color: var(--color-muted);

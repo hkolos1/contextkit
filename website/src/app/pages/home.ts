@@ -82,7 +82,8 @@ export default class Home {
     },
   ];
 
-  readonly sourceSteps = `git clone ${site.repo}.git
+  readonly sourceSteps = `git clone \\
+  ${site.repo}
 cd toolpeek
 npm ci
 npm run build`;
