@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: Geist;
+  src: url(/fonts/geist.woff2) format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url(/fonts/geist-mono.woff2) format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Toolpeek tokens (brand/tokens.css). The website is dark only. */
+@theme {
+  --color-bg: #09090f;
+  --color-surface: #15151f;
+  --color-raised: #1e1e2b;
+  --color-line: #30303d;
+  --color-fg: #fafafa;
+  --color-muted: #a1a1aa;
+  --color-primary: #8b5cf6;
+  --color-primary-fill: #7c3aed;
+  --color-accent: #c4b5fd;
+  --font-sans: Geist, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+}
+::selection {
+  background: rgb(139 92 246 / 0.4);
+}
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.rise {
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Long-form pages (privacy policy). */
+.prose {
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+.prose h1 {
+  color: var(--color-fg);
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.prose .lead {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
+.prose h2 {
+  margin-top: 2.5rem;
+  color: var(--color-fg);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.prose p,
+.prose ul,
+.prose table {
+  margin-top: 1rem;
+}
+.prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.prose li + li {
+  margin-top: 0.5rem;
+}
+.prose strong {
+  color: var(--color-fg);
+  font-weight: 500;
+}
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-accent);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.prose th,
+.prose td {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-line);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  color: var(--color-fg);
+  font-weight: 500;
+  background: var(--color-surface);
+}

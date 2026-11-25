@@ -1,0 +1,55 @@
+<a
+  href="#main"
+  class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-surface focus:px-3 focus:py-2"
+  >Skip to content</a
+>
+<header class="sticky top-0 z-40 border-b border-line/60 bg-bg/85 backdrop-blur">
+  <nav
+    class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5"
+    aria-label="Main"
+  >
+    <a routerLink="/" class="flex items-center" aria-label="Toolpeek home">
+      <img src="/brand/wordmark-dark.svg" alt="Toolpeek" width="147" height="32" />
+    </a>
+    <div class="flex items-center gap-1 text-sm sm:gap-2">
+      <a
+        routerLink="/"
+        fragment="features"
+        class="hidden rounded-md px-3 py-2 text-muted transition-colors hover:text-fg sm:block"
+        >Features</a
+      >
+      <a
+        [href]="site.repo"
+        class="flex items-center gap-2 rounded-md px-3 py-2 text-muted transition-colors hover:text-fg"
+        ><tp-icon name="github" /><span class="hidden sm:inline">GitHub</span
+        ><span class="sr-only sm:hidden">GitHub</span></a
+      >
+      <a
+        [href]="installHref"
+        class="ml-1 whitespace-nowrap rounded-md bg-fg px-3.5 py-2 font-medium text-bg transition-colors hover:bg-accent"
+        >Install<span class="hidden sm:inline">&nbsp;extension</span></a
+      >
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+  <router-outlet />
+</main>
+
+<footer class="border-t border-line/60">
+  <div
+    class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div class="flex items-center gap-3">
+      <img src="/brand/symbol.svg" alt="" width="24" height="24" class="rounded-md" />
+      <span>© {{ year }} Toolpeek contributors · MIT License</span>
+    </div>
+    <ul class="flex flex-wrap gap-x-6 gap-y-2">
+      <li><a [href]="site.repo" class="hover:text-fg">GitHub</a></li>
+      <li><a routerLink="/privacy" class="hover:text-fg">Privacy Policy</a></li>
+      <li><a [href]="site.issues" class="hover:text-fg">Report an issue</a></li>
+      <li><a [href]="site.license" class="hover:text-fg">License</a></li>
+    </ul>
+  </div>
+</footer>

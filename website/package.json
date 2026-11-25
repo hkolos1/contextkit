@@ -1,0 +1,32 @@
+{
+  "name": "toolpeek-website",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "deploy": "ng build && firebase deploy --only hosting"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "22.3.0",
+    "@angular/compiler": "22.3.0",
+    "@angular/core": "22.3.0",
+    "@angular/platform-browser": "22.3.0",
+    "@angular/router": "22.3.0",
+    "rxjs": "7.8.2",
+    "tslib": "2.9.1"
+  },
+  "devDependencies": {
+    "@angular/build": "22.3.0",
+    "@angular/cli": "22.3.0",
+    "@angular/compiler-cli": "22.3.0",
+    "@tailwindcss/postcss": "4.3.5",
+    "postcss": "8.5.33",
+    "tailwindcss": "4.3.5",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": "^22.22.3 || >=24.15.0"
+  }
+}
