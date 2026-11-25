@@ -18,7 +18,7 @@ import { audit } from "../core/audit";
 import { emptySchema, initial, validate } from "../core/schema";
 import { download, report } from "./export";
 @Component({
-  selector: "ck-app",
+  selector: "tp-app",
   imports: [Field, Popup, Agent],
   templateUrl: "workspace.html",
 })
@@ -328,7 +328,7 @@ export class Workspace {
     }
   }
   async clear() {
-    if (confirm("Clear all ContextKit activity on this browser?")) {
+    if (confirm("Clear all Toolpeek activity on this browser?")) {
       await request({ kind: "clear" });
       await this.loadHistory();
     }

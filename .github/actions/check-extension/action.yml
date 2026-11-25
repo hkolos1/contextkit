@@ -17,5 +17,5 @@ runs:
         npm run package
         npx playwright install --with-deps chromium
         version=$(node -p "require('./package.json').version")
-        unzip -q "release/contextkit-v${version}.zip" -d "$RUNNER_TEMP/contextkit"
-        CONTEXTKIT_EXTENSION_DIR="$RUNNER_TEMP/contextkit" npm run e2e
+        unzip -q "release/toolpeek-v${version}.zip" -d "$RUNNER_TEMP/toolpeek"
+        TOOLPEEK_EXTENSION_DIR="$RUNNER_TEMP/toolpeek" npm run e2e

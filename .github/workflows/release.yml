@@ -1,4 +1,4 @@
-name: Publish ContextKit
+name: Publish Toolpeek
 on:
   push:
     tags: ['v*']
@@ -24,19 +24,19 @@ jobs:
         run: |
           set -euo pipefail
           tag="$GITHUB_REF_NAME"
-          name="contextkit-${tag}.zip"
+          name="toolpeek-${tag}.zip"
           asset="release/$name"
           notes="docs/releases/$tag.md"
           test -s "$notes"
           if gh release view "$tag" --json assets,isDraft > "$RUNNER_TEMP/release.json"; then
             if jq -e '.isDraft' "$RUNNER_TEMP/release.json" >/dev/null; then
               gh release upload "$tag" "$asset" --clobber
-              gh release edit "$tag" --title "ContextKit $tag" --notes-file "$notes" --draft=false
+              gh release edit "$tag" --title "Toolpeek $tag" --notes-file "$notes" --draft=false
             else
               digest="sha256:$(sha256sum "$asset" | cut -d' ' -f1)"
               jq -e --arg name "$name" --arg digest "$digest" \
                 'any(.assets[]; .name == $name and .digest == $digest)' "$RUNNER_TEMP/release.json"
             fi
           else
-            gh release create "$tag" "$asset" --verify-tag --title "ContextKit $tag" --notes-file "$notes"
+            gh release create "$tag" "$asset" --verify-tag --title "Toolpeek $tag" --notes-file "$notes"
           fi

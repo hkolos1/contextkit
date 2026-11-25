@@ -1,6 +1,6 @@
 <header>
   <div class="brand">
-    <img src="icons/logo.svg" width="30" height="30" alt="" /><b>ContextKit</b>
+    <img src="icons/logo.svg" width="30" height="30" alt="" /><b>Toolpeek</b>
   </div>
   <div class="actions">
     <button
@@ -25,7 +25,7 @@
 </header>
 @if (settings()) {
   <section class="settings">
-    <div class="heading"><h2>Settings</h2><small>ContextKit v{{ version }}</small></div>
+    <div class="heading"><h2>Settings</h2><small>Toolpeek v{{ version }}</small></div>
     <label
       >Appearance
       <select [value]="theme()" (change)="setTheme($any($event.target).value)">
@@ -102,7 +102,7 @@
     </aside>
   }
   @if (popup) {
-    <ck-popup
+    <tp-popup
       [tools]="tools()"
       [loading]="loading()"
       [ready]="windowId >= 0"
@@ -253,7 +253,7 @@
               (input)="raw.set($any($event.target).value)"
             ></textarea>
           } @else {
-            <ck-field
+            <tp-field
               [schema]="schema()"
               [value]="parsed().v"
               (changed)="raw.set(pretty($event))"
@@ -325,7 +325,7 @@
         }
       }
       @case ("Agent") {
-        <ck-agent [snap]="offline() === null ? snap() : null" [windowId]="windowId" />
+        <tp-agent [snap]="offline() === null ? snap() : null" [windowId]="windowId" />
       }
       @case ("Activity") {
         <div class="heading">
@@ -357,7 +357,7 @@
             }
           </select></label
         >
-        <p class="muted">Local discovery changes and ContextKit executions.</p>
+        <p class="muted">Local discovery changes and Toolpeek executions.</p>
         @for (e of events(); track $index) {
           <details>
             <summary>

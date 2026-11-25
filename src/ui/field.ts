@@ -2,7 +2,7 @@ import { Component, computed, input, output } from "@angular/core";
 import { object, pretty } from "../core/model";
 import { initial } from "../core/schema";
 @Component({
-  selector: "ck-field",
+  selector: "tp-field",
   templateUrl:"field.html",
 })
 export class Field {

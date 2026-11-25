@@ -1,8 +1,8 @@
 import { adapter } from "./adapter";
 import { respond, type PageCommand } from "../core/bridge";
-const scope = globalThis as typeof globalThis & { contextKitReady?: boolean };
-if (!scope.contextKitReady) {
-  scope.contextKitReady = true;
+const scope = globalThis as typeof globalThis & { toolpeekReady?: boolean };
+if (!scope.toolpeekReady) {
+  scope.toolpeekReady = true;
   const site = adapter(document);
   let timer: ReturnType<typeof setTimeout>;
   site.api?.addEventListener?.("toolchange", () => {

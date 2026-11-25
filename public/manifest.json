@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ContextKit",
+  "name": "Toolpeek",
   "version": "0.2.0",
-  "description": "Inspect, test and audit WebMCP tools locally in a Chrome side panel.",
+  "description": "See what AI agents see. Discover, inspect and run the WebMCP tools a website exposes, from Chrome's side panel.",
   "minimum_chrome_version": "116",
   "permissions": [
     "activeTab",
@@ -15,7 +15,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Inspect with ContextKit"
+    "default_title": "Inspect with Toolpeek"
   },
   "side_panel": {
     "default_path": "panel.html"

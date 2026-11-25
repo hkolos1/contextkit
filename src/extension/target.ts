@@ -3,7 +3,7 @@ export async function active(windowId: number) {
   const [tab] = await chrome.tabs.query({ active: true, windowId });
   if (tab?.id === undefined || !tab.url || !/^https?:\/\//.test(tab.url))
     throw Error(
-      "Open ContextKit from its toolbar icon on an HTTP or HTTPS page to grant access.",
+      "Open Toolpeek from its toolbar icon on an HTTP or HTTPS page to grant access.",
     );
   return { id: tab.id, origin: new URL(tab.url).origin };
 }

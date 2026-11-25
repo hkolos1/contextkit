@@ -39,7 +39,7 @@ type PerProvider = Partial<Record<ProviderId, string>>;
 const MAX_TURNS = 25;
 // Long enough for tools that wait on the user in the page (e.g. payment authorization).
 const TOOL_TIMEOUT = 300000;
-@Component({ selector: "ck-agent", templateUrl: "agent.html" })
+@Component({ selector: "tp-agent", templateUrl: "agent.html" })
 export class Agent {
   snap = input.required<Snapshot | null>();
   windowId = input.required<number>();

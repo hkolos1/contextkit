@@ -30,7 +30,7 @@
             }
           </div>
           @if (has(pair[0]) || required(pair[0])) {
-            <small>{{ description(pair[1]) }}</small><ck-field
+            <small>{{ description(pair[1]) }}</small><tp-field
               [schema]="pair[1]"
               [label]="pair[0]"
               [value]="record()[pair[0]]"
@@ -52,7 +52,7 @@
             <strong>Item {{ i + 1 }}</strong
             ><button type="button" (click)="remove(i)">Remove</button>
           </div>
-          <ck-field
+          <tp-field
             [schema]="definition()['items']"
             [value]="item"
             [label]="label() + ' item ' + (i + 1)"

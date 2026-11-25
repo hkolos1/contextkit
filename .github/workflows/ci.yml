@@ -1,4 +1,4 @@
-name: Validate ContextKit
+name: Validate Toolpeek
 on:
   push:
     branches: ['**']

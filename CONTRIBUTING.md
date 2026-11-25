@@ -10,6 +10,6 @@ Contributions are licensed under the MIT license.
 
 ## Releases
 
-The public distribution channel is [GitHub Releases](https://github.com/hkolos1/contextkit/releases). For a release, update the npm version and lockfile, the manifest version, the changelog and the matching notes in `docs/releases/vX.Y.Z.md`. Settings reads the installed version directly from the manifest.
+The public distribution channel is [GitHub Releases](https://github.com/hkolos1/toolpeek/releases). For a release, update the npm version and lockfile, the manifest version, the changelog and the matching notes in `docs/releases/vX.Y.Z.md`. Settings reads the installed version directly from the manifest.
 
-Run `npm run package` to create `release/contextkit-vX.Y.Z.zip`. Commit the release changes, tag that commit with the matching `vX.Y.Z` tag and push the branch and tag. The release workflow validates versions, builds the production ZIP, runs the browser suite against its extracted contents and publishes the tested asset. Use `CONTEXTKIT_CHROME` to test with a particular Chrome for Testing executable, and `CONTEXTKIT_EXTENSION_DIR` to test an extracted release locally.
+Run `npm run package` to create `release/toolpeek-vX.Y.Z.zip`. Commit the release changes, tag that commit with the matching `vX.Y.Z` tag and push the branch and tag. The release workflow validates versions, builds the production ZIP, runs the browser suite against its extracted contents and publishes the tested asset. Use `TOOLPEEK_CHROME` to test with a particular Chrome for Testing executable, and `TOOLPEEK_EXTENSION_DIR` to test an extracted release locally.

@@ -3,13 +3,13 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 async function workspace(native: boolean, grant = true) {
-  const root = await mkdtemp(join(tmpdir(), "contextkit-e2e-")),
-    ext = resolve(process.env.CONTEXTKIT_EXTENSION_DIR ?? "dist");
+  const root = await mkdtemp(join(tmpdir(), "toolpeek-e2e-")),
+    ext = resolve(process.env.TOOLPEEK_EXTENSION_DIR ?? "dist");
   const context = await chromium.launchPersistentContext(
     join(root, "profile"),
     {
       channel: "chromium",
-      executablePath: process.env.CONTEXTKIT_CHROME,
+      executablePath: process.env.TOOLPEEK_CHROME,
       headless: true,
       viewport: { width: 440, height: 800 },
       args: [
@@ -147,12 +147,12 @@ test("unsupported browser, offline inventory, audit export and preferences", asy
     ).toHaveCount(1);
     const download = panel.waitForEvent("download");
     await panel.getByRole("button", { name: "HTML", exact: true }).click();
-    expect((await download).suggestedFilename()).toBe("contextkit-audit.html");
+    expect((await download).suggestedFilename()).toBe("toolpeek-audit.html");
     await panel.getByRole("button", { name: "Settings", exact: true }).click();
     const version = await panel.evaluate(
       () => chrome.runtime.getManifest().version,
     );
-    await expect(panel.getByText(`ContextKit v${version}`)).toBeVisible();
+    await expect(panel.getByText(`Toolpeek v${version}`)).toBeVisible();
     await panel.getByLabel("Appearance").selectOption("dark");
     await expect(panel.locator("html")).toHaveAttribute("data-theme", "dark");
     await panel.getByLabel("Keep activity").check();
@@ -187,7 +187,7 @@ test("nested schema editing, raw validation and native side panel action", async
     await expect(panel.getByText("WebMCP available")).toBeVisible();
     await panel.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" });
     await panel.setViewportSize({ width: 400, height: 760 });
-    if (process.env.CONTEXTKIT_PREVIEWS)
+    if (process.env.TOOLPEEK_PREVIEWS)
       await panel.screenshot({ path: "docs/explorer.png" });
     await panel
       .getByRole("button", { name: "Playground", exact: true })
@@ -210,8 +210,8 @@ test("nested schema editing, raw validation and native side panel action", async
     await expect(panel.getByText("Run tool", { exact: true })).toBeDisabled();
     await panel.goto(`${base}/popup.html`);
     await expect(panel.locator(".preview")).toHaveCount(3);
-    if (process.env.CONTEXTKIT_PREVIEWS)
-      await panel.locator("ck-app").screenshot({ path: "docs/popup.png" });
+    if (process.env.TOOLPEEK_PREVIEWS)
+      await panel.locator("tp-app").screenshot({ path: "docs/popup.png" });
     const worker = w.context.serviceWorkers()[0];
     await panel.getByRole("button", { name: "Open Side Panel" }).click();
     await expect

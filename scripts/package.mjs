@@ -14,7 +14,7 @@ if (
 
 const files = {};
 for (const file of releaseFiles) files[file] = await readFile(`dist/${file}`);
-const archive = `release/contextkit-${tag}.zip`;
+const archive = `release/toolpeek-${tag}.zip`;
 await mkdir("release", { recursive: true });
 await writeFile(
   archive,
