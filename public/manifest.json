@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Toolpeek",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "See what AI agents see. Discover, inspect and run the WebMCP tools a website exposes, from Chrome's side panel.",
   "minimum_chrome_version": "116",
   "permissions": [

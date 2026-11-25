@@ -1,6 +1,6 @@
 # Security
 
-Report suspected security issues privately to the repository maintainer. Use the repository's private vulnerability reporting channel when enabled. Include the Toolpeek version, Chrome build, operating system, affected entry point and a sanitized description. Omit real activity logs, credentials and private site data.
+Report suspected security issues privately through [GitHub private vulnerability reporting](https://github.com/hkolos1/toolpeek/security/advisories/new), not in public issues. Include the Toolpeek version, Chrome build, operating system, affected entry point and a sanitized description. Omit real activity logs, credentials and private site data.
 
 ## Trust boundaries
 
@@ -12,4 +12,8 @@ A page navigation, a transport failure, an oversized response or a timeout may i
 
 ## Release provenance
 
-Install the versioned extension ZIP attached to an official [Toolpeek release](https://github.com/hkolos1/toolpeek/releases). The tag identifies the source commit. The published asset’s SHA-256 digest is available in GitHub's release metadata. Extensions installed with **Load unpacked** require manual updates.
+Install from the Chrome Web Store once listed, or the versioned extension ZIP attached to an official [Toolpeek release](https://github.com/hkolos1/toolpeek/releases). The tag identifies the source commit. The published asset’s SHA-256 digest is available in GitHub's release metadata. Extensions installed with **Load unpacked** require manual updates.
+
+## API keys
+
+Agent API keys are stored unencrypted in the extension's local storage, are never logged or included in exports, and are sent only to their provider. Use revocable keys with spending limits.

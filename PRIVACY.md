@@ -1,13 +1,62 @@
-# Privacy
+# Privacy Policy
 
-Toolpeek runs on your device. It has no accounts, analytics, telemetry, remote scripts or backend. AI providers are contacted only by the optional Agent tab, described below. Clicking its Chrome action grants temporary access to the active website. Discovery reads tool metadata for its top-level document. Running a tool passes the arguments to that website. The website controls its own implementation and may contact its services.
+Effective November 25, 2026. Applies to the Toolpeek browser extension and the website at https://toolpeek.web.app.
 
-Activity includes website origins, timestamps, tool names, arguments and results. It stays in browser session memory by default. Settings lets you opt into disk storage and turn it off again. Disabling persistence moves retained history back to session memory. Clear under Activity deletes retained entries. Theme and the persistence preference are local settings. Toolpeek does not use Chrome Sync.
+Toolpeek runs in your browser. It has no account system, backend, analytics or telemetry, and it does not sell or share your data. Its developers receive no data from the extension.
 
-Exports save data to your chosen download destination. Clipboard actions occur on request. Export files and clipboard contents can contain secrets from tool arguments or responses. Clearing Activity does not remove files or clipboard data. Importing a definition opens it in the current UI for offline inspection.
+## What the extension accesses
 
-## Agent tab (optional)
+- **The active tab, when you grant it.** Clicking the Toolpeek toolbar icon gives the extension temporary access to the current tab (Chrome's `activeTab` permission). Toolpeek then runs its own packaged script in that tab's top-level page. It requests no host permissions and cannot read sites you have not opened it on.
+- **WebMCP tool definitions.** On that page Toolpeek reads the tools registered through WebMCP (`document.modelContext`): their names, descriptions, input schemas and annotations. It also reads the page's origin (for example `https://example.com`). It does not read the rest of the page's content.
+- **Tool runs.** When you run a tool, or approve one the Agent runs, Toolpeek passes the arguments to the website's own tool implementation and shows the result. The website decides what that tool does and may contact its own services.
 
-The Agent tab stays inactive until you save an API key for one of its providers: Google Gemini, OpenAI or Anthropic. Keys are kept in this browser's extension storage (`chrome.storage.local`), are not synced, and each key is sent only to its provider (`generativelanguage.googleapis.com`, `api.openai.com` or `api.anthropic.com`). The extension's Content Security Policy allows no other network destinations. When you send a message, Toolpeek sends your prompt, the website origin, the website's tool definitions, the conversation so far and the results of tools it ran to the selected provider, which processes them under the terms of your account with that provider. Saving a Gemini or OpenAI key also lists the models it can use. Tool calls the agent makes run through the same guarded path as the Playground and appear in Activity. Remove a key in the Agent settings to stop requests to that provider. The conversation itself is held in memory and is discarded when the side panel closes or you start a new chat.
+## What is stored, and where
 
-Releases are downloaded manually from GitHub. The installed extension makes no automatic update checks or requests to GitHub.
+All storage uses Chrome's extension storage on your device. Toolpeek does not use Chrome Sync.
+
+| Data | Where | How long |
+| --- | --- | --- |
+| Activity (origins, timestamps, tool names, arguments, results, durations, errors) | Session storage (`chrome.storage.session`) by default | Until Chrome closes, or until you clear it. Limited to the latest 100 entries. |
+| Activity, if you turn on **Keep activity after Chrome closes** | Local storage (`chrome.storage.local`) | Until you clear it, turn the setting off, or remove the extension |
+| Preferences (theme, activity setting, Agent provider and model) | Local storage | Until you change them or remove the extension |
+| AI provider API keys you add in the Agent tab | Local storage | Until you remove the key or the extension |
+| Agent conversation | Memory only | Discarded when the side panel closes or you start a new chat |
+
+API keys are stored as entered in the extension's local storage on this device. Toolpeek does not add its own encryption. Anyone with access to your browser profile could read them, so use keys you can revoke, ideally with spending limits.
+
+## What is sent to AI providers
+
+The Agent tab is optional and does nothing until you add an API key. When you use it, Toolpeek sends data directly from your browser to the provider you selected, and to no one else:
+
+| Provider | Endpoint |
+| --- | --- |
+| Google Gemini | `generativelanguage.googleapis.com` |
+| OpenAI | `api.openai.com` |
+| Anthropic | `api.anthropic.com` |
+
+Each request contains your API key for that provider, your messages, the website's origin, the website's tool definitions, the conversation so far and the results of tools that ran. Saving a Gemini or OpenAI key also requests the list of models that key can use. The provider processes this data under your agreement with it. Review its terms before sending sensitive information. The extension's Content Security Policy blocks network connections to any other destination.
+
+Without an API key, the extension makes no network requests of its own.
+
+## Exports and clipboard
+
+Exporting tools, activity or audit reports saves a file to the location you choose. Copy buttons put data on your clipboard. These happen only when you ask, and the files or clipboard contents can include sensitive arguments or results. Clearing activity does not delete exported files.
+
+## Your controls
+
+- **Clear activity:** Activity → Clear.
+- **Stop keeping activity:** Settings → turn off *Keep activity after Chrome closes*.
+- **Remove an API key:** Agent → settings → *Remove key*.
+- **Remove everything:** uninstalling the extension deletes all of its stored data.
+
+## Website
+
+https://toolpeek.web.app is a static site served by Firebase Hosting (Google). It uses no cookies, analytics or third-party scripts, and serves its fonts itself. Like any web host, Firebase Hosting may process request data such as IP addresses and user agents to deliver and protect the service.
+
+## Chrome Web Store User Data Policy
+
+The use of information received from Chrome APIs adheres to the [Chrome Web Store User Data Policy](https://developer.chrome.com/docs/webstore/program-policies/policies), including the Limited Use requirements. Data is used only to provide Toolpeek's single purpose: discovering, inspecting and running a website's WebMCP tools.
+
+## Changes and contact
+
+Changes to this policy are published in this file and on the website, with a new effective date. Ask questions or report problems in [GitHub Issues](https://github.com/hkolos1/toolpeek/issues). Report security issues privately as described in [SECURITY.md](SECURITY.md).

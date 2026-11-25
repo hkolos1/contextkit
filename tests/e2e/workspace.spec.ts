@@ -188,8 +188,6 @@ test("nested schema editing, raw validation and native side panel action", async
     await expect(panel.getByText("WebMCP available")).toBeVisible();
     await panel.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" });
     await panel.setViewportSize({ width: 400, height: 760 });
-    if (process.env.TOOLPEEK_PREVIEWS)
-      await panel.screenshot({ path: "docs/explorer.png" });
     await panel
       .getByRole("button", { name: "Playground", exact: true })
       .click();
@@ -211,8 +209,6 @@ test("nested schema editing, raw validation and native side panel action", async
     await expect(panel.getByText("Run tool", { exact: true })).toBeDisabled();
     await panel.goto(`${base}/popup.html`);
     await expect(panel.locator(".preview")).toHaveCount(3);
-    if (process.env.TOOLPEEK_PREVIEWS)
-      await panel.locator("tp-app").screenshot({ path: "docs/popup.png" });
     const worker = w.context.serviceWorkers()[0];
     await panel.getByRole("button", { name: "Open Side Panel" }).click();
     await expect
