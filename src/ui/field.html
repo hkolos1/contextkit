@@ -5,7 +5,7 @@
   >
     @for (v of choices(); track $index) {
       <option [value]="$index" [selected]="pretty(v) === pretty(value())">
-        {{ pretty(v) }}
+        {{ optionText(v) }}
       </option>
     }
   </select>

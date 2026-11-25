@@ -39,6 +39,10 @@ export class Field {
     const v = this.value();
     return Array.isArray(v) ? v : [];
   });
+  /** Enum option text: strings as-is, other values as JSON. */
+  optionText(v: unknown) {
+    return typeof v === "string" ? v : pretty(v);
+  }
   has(k: string) {
     return Object.hasOwn(this.record(), k);
   }
