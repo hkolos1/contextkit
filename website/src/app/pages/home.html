@@ -73,9 +73,9 @@
       class="overflow-hidden rounded-xl border border-line bg-surface shadow-[0_24px_80px_-20px_rgb(0_0_0/0.7)]"
     >
       <div class="flex items-center gap-2 border-b border-line px-4 py-3" aria-hidden="true">
-        <span class="size-3 rounded-full bg-line"></span>
-        <span class="size-3 rounded-full bg-line"></span>
-        <span class="size-3 rounded-full bg-line"></span>
+        <span class="size-3 rounded-full bg-[#ff5f57] shadow-[inset_0_0_0_0.5px_rgb(0_0_0/0.25)]"></span>
+        <span class="size-3 rounded-full bg-[#febc2e] shadow-[inset_0_0_0_0.5px_rgb(0_0_0/0.25)]"></span>
+        <span class="size-3 rounded-full bg-[#28c840] shadow-[inset_0_0_0_0.5px_rgb(0_0_0/0.25)]"></span>
         <span
           class="ml-3 flex-1 truncate rounded-md bg-bg px-3 py-1 text-left font-mono text-xs text-muted"
           >127.0.0.1:4178 · Toolpeek demo</span
@@ -133,7 +133,7 @@
         </li>
       }
     </ul>
-    <div class="mt-6 flex items-start gap-3 rounded-xl border border-line p-5 text-sm text-muted">
+    <div class="beam-border mt-6 flex items-start gap-3 rounded-xl border border-line p-5 text-sm text-muted">
       <tp-icon name="lock" [size]="18" class="mt-0.5 text-accent" />
       <p>
         <span class="text-fg">Local by default.</span> No account, backend, analytics or host
@@ -154,7 +154,7 @@
       relaunch Chrome.
     </p>
     <div class="mt-10 grid gap-4 lg:grid-cols-3">
-      <article class="flex flex-col rounded-xl border border-line bg-surface p-6">
+      <article style="--beam-delay: 0s" class="beam-border subtle flex flex-col rounded-xl border border-line bg-surface p-6">
         <h3 class="flex items-center gap-2 font-medium">
           <tp-icon name="puzzle" class="text-accent" />Chrome Web Store
         </h3>
@@ -172,7 +172,7 @@
           </p>
         }
       </article>
-      <article class="flex flex-col rounded-xl border border-primary/50 bg-surface p-6">
+      <article style="--beam-delay: -3.3s" class="beam-border subtle flex flex-col rounded-xl border border-primary/50 bg-surface p-6">
         <h3 class="flex items-center gap-2 font-medium">
           <tp-icon name="package" class="text-accent" />GitHub Releases
         </h3>
@@ -188,7 +188,7 @@
           ><tp-icon name="download" [size]="14" />Download latest release</a
         >
       </article>
-      <article class="flex flex-col rounded-xl border border-line bg-surface p-6">
+      <article style="--beam-delay: -6.6s" class="beam-border subtle flex flex-col rounded-xl border border-line bg-surface p-6">
         <h3 class="flex items-center gap-2 font-medium">
           <tp-icon name="code" class="text-accent" />Build from source
         </h3>
