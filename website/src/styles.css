@@ -64,45 +64,58 @@ body {
   }
 }
 
-/* Feature grid: violet light travels through the 1px gaps between cells.
-   The cells cover the background, so only the grid lines show the beams.
-   Positions are exact for the 3x2 desktop grid: a spot of size S at
-   calc(p% + offset) is centred on p of the width when offset = S*p - S/2. */
+/* Feature grid: violet beams travel along the 1px gaps between cells and the
+   1px padding that forms the outline. Cells cover everything else.
+   Each beam is a 360x140 (or 140x360) spot. To centre a spot of size S on a
+   fraction p of the width, position it at calc(p * 100% + S*p - S/2). */
+@property --a { syntax: "<length-percentage>"; inherits: false; initial-value: -360px; }
+@property --b { syntax: "<length-percentage>"; inherits: false; initial-value: -360px; }
+@property --c { syntax: "<length-percentage>"; inherits: false; initial-value: -360px; }
+@property --d { syntax: "<length-percentage>"; inherits: false; initial-value: -360px; }
+@keyframes beam-a { to { --a: calc(100% + 360px); } }
+@keyframes beam-b { to { --b: calc(100% + 360px); } }
+@keyframes beam-c { to { --c: calc(100% + 360px); } }
+@keyframes beam-d { to { --d: calc(100% + 360px); } }
+
 .lasers {
   background-color: var(--color-line);
 }
+/* Inner cells follow the container's rounded corners so the outline stays 1px. */
+.lasers > li:first-child { border-top-left-radius: 11px; border-top-right-radius: 11px; }
+.lasers > li:last-child { border-bottom-left-radius: 11px; border-bottom-right-radius: 11px; }
+@media (min-width: 40rem) {
+  .lasers > li { border-radius: 0 !important; }
+  .lasers > li:nth-child(1) { border-top-left-radius: 11px !important; }
+  .lasers > li:nth-child(2) { border-top-right-radius: 11px !important; }
+  .lasers > li:nth-child(5) { border-bottom-left-radius: 11px !important; }
+  .lasers > li:nth-child(6) { border-bottom-right-radius: 11px !important; }
+}
+@media (min-width: 64rem) {
+  .lasers > li:nth-child(2),
+  .lasers > li:nth-child(5) { border-radius: 0 !important; }
+  .lasers > li:nth-child(3) { border-top-right-radius: 11px !important; }
+  .lasers > li:nth-child(4) { border-bottom-left-radius: 11px !important; }
+}
 @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
   .lasers {
-    background-image:
-      radial-gradient(closest-side, #fff, rgb(196 181 253) 25%, rgb(139 92 246 / 0.5) 60%, transparent),
-      radial-gradient(closest-side, #fff, rgb(196 181 253) 25%, rgb(139 92 246 / 0.5) 60%, transparent);
+    background-image: radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent), radial-gradient(closest-side, #fff, #fff 18%, #c4b5fd 42%, rgb(139 92 246 / 0.85) 70%, transparent);
     background-size:
-      360px 140px,
-      140px 360px;
+      360px 140px, 360px 140px, 360px 140px,
+      140px 360px, 140px 360px, 140px 360px, 140px 360px;
     background-repeat: no-repeat;
-    animation: lasers 10s linear infinite;
-  }
-}
-@keyframes lasers {
-  0% {
     background-position:
-      -360px 50%,
-      calc(33.333% - 23.33px) -360px;
-  }
-  50% {
-    background-position:
-      calc(100% + 360px) 50%,
-      calc(33.333% - 23.33px) calc(100% + 360px);
-  }
-  50.01% {
-    background-position:
-      calc(100% + 360px) 50%,
-      calc(66.667% + 23.33px) -360px;
-  }
-  100% {
-    background-position:
-      -360px 50%,
-      calc(66.667% + 23.33px) calc(100% + 360px);
+      var(--a) -70px,
+      var(--b) 50%,
+      var(--a) calc(100% + 70px),
+      -70px var(--c),
+      calc(33.333% - 23.33px) var(--d),
+      calc(66.667% + 23.33px) var(--c),
+      calc(100% + 70px) var(--d);
+    animation:
+      beam-a 2.8s linear infinite,
+      beam-b 2.8s linear -1.4s infinite reverse,
+      beam-c 2.2s linear infinite,
+      beam-d 2.2s linear -1.1s infinite reverse;
   }
 }
 
