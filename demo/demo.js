@@ -6,17 +6,28 @@ const items = document.querySelector("#items"),
   status = document.querySelector("#status"),
   log = document.querySelector("#log"),
   toggle = document.querySelector("#toggle");
+const art = {
+  A1: '<svg viewBox="0 0 120 90" aria-hidden="true"><rect x="34" y="12" width="52" height="66" rx="4" fill="#1f3a5f"/><rect x="34" y="12" width="8" height="66" fill="#16304f"/><rect x="50" y="26" width="26" height="6" rx="2" fill="#f5efe3"/><path d="M80 12v30l-5-4-5 4V12" fill="#c2410c"/></svg>',
+  B2: '<svg viewBox="0 0 120 90" aria-hidden="true"><g transform="rotate(-32 60 45)"><rect x="18" y="38" width="70" height="14" rx="2" fill="#e8b44a"/><rect x="18" y="38" width="10" height="14" fill="#d4d4d8"/><rect x="12" y="38" width="7" height="14" rx="2" fill="#e88f8f"/><path d="M88 38l16 7-16 7z" fill="#f2d7a6"/><path d="M99 43l5 2-5 2z" fill="#3f3f46"/></g></svg>',
+};
+const fallback =
+  '<svg viewBox="0 0 120 90" aria-hidden="true"><rect x="38" y="22" width="44" height="46" rx="6" fill="#d6d3d1"/><path d="M38 34h44" stroke="#a8a29e" stroke-width="3"/></svg>';
 function render() {
   items.replaceChildren(
     ...Array.from(inventory, ([id, item]) => {
       const li = document.createElement("li");
-      const sku = document.createElement("code");
-      const name = document.createElement("span");
-      const price = document.createElement("span");
-      sku.textContent = id;
+      const figure = document.createElement("div");
+      figure.className = "art";
+      figure.innerHTML = art[id] ?? fallback;
+      const name = document.createElement("h3");
       name.textContent = item.name;
-      price.textContent = `$${item.price.toFixed(2)}`;
-      li.append(sku, name, price);
+      const meta = document.createElement("p");
+      const sku = document.createElement("code");
+      sku.textContent = id;
+      const price = document.createElement("b");
+      price.textContent = `$${Number(item.price).toFixed(2)}`;
+      meta.append(sku, price);
+      li.append(figure, name, meta);
       return li;
     }),
   );
@@ -131,6 +142,31 @@ const definitions = [
   ],
 ];
 const api = document.modelContext;
+/** One line per tool in the "Agent tools" panel, updated in place. */
+function row(name, annotations = {}, state, detail = "") {
+  let li = log.querySelector(`[data-tool="${name}"]`);
+  if (!li) {
+    li = document.createElement("li");
+    li.dataset.tool = name;
+    log.append(li);
+  }
+  const kind = annotations.readOnlyHint
+    ? "read-only"
+    : annotations.destructiveHint
+      ? "destructive"
+      : annotations.consequentialHint
+        ? "writes"
+        : "unclassified";
+  const code = document.createElement("code");
+  code.textContent = name;
+  const tag = document.createElement("span");
+  tag.className = `tag ${kind}`;
+  tag.textContent = kind;
+  const status = document.createElement("small");
+  status.textContent = detail ? `${state} · ${detail}` : state;
+  li.dataset.state = state;
+  li.replaceChildren(code, tag, status);
+}
 let controller;
 async function register(
   [name, description, inputSchema, annotations, execute],
@@ -147,9 +183,10 @@ async function register(
       },
       options,
     );
-    log.textContent += `${name} registered\n`;
+    row(name, annotations, "registered");
+    options?.signal?.addEventListener("abort", () => row(name, annotations, "removed"));
   } catch (e) {
-    log.textContent += `${name} rejected · ${String(e)}\n`;
+    row(name, annotations, "rejected", String(e));
   }
 }
 if (typeof api?.registerTool === "function") {

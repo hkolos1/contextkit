@@ -25,7 +25,7 @@ body{background:#06090D;color:#F2F6F8;font-family:Geist,sans-serif;overflow:hidd
 .bar{grid-column:1/-1;display:flex;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid #24313A}
 .bar i{width:12px;height:12px;border-radius:50%;background:#FF5F57;box-shadow:inset 0 0 0 .5px rgb(0 0 0/.25)}.bar i:nth-child(2){background:#FEBC2E}.bar i:nth-child(3){background:#28C840}
 .bar span{margin-left:10px;flex:1;background:#06090D;border-radius:6px;padding:4px 12px;font:12px GeistMono;color:#93A1AC}
-.frame img{display:block;width:100%;height:760px}
+.frame img{display:block;width:100%;height:760px;object-fit:cover;object-position:left top}
 .frame img+img{border-left:1px solid #24313A}
 .eyebrow{font:500 15px GeistMono;letter-spacing:.18em;text-transform:uppercase;color:#67E8F9}
 h1{font-weight:600;letter-spacing:-.025em}
@@ -35,7 +35,7 @@ const panels = {};
 for (const name of ["tools", "playground", "agent", "activity", "audit"])
   panels[name] = await shot(`${name}-dark`);
 const frame = (panel) =>
-  `<div class="frame"><div class="bar"><i></i><i></i><i></i><span>127.0.0.1:4178 · Toolpeek demo</span></div><img src="${site}"><img src="${panels[panel]}"></div>`;
+  `<div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="${site}"><img src="${panels[panel]}"></div>`;
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ deviceScaleFactor: 1 });
