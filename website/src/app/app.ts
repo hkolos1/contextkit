@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  signal,
 } from "@angular/core";
 import { Meta } from "@angular/platform-browser";
 import {
@@ -25,11 +26,17 @@ const description =
   imports: [RouterOutlet, RouterLink, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./app.html",
+  host: { "(window:scroll)": "onScroll()" },
 })
 export class App {
   readonly site = site;
   readonly installHref = installHref;
   readonly year = new Date().getFullYear();
+  /** The header is transparent over the hero and gains a backdrop once the page scrolls. */
+  readonly scrolled = signal(false);
+  onScroll() {
+    this.scrolled.set(window.scrollY > 8);
+  }
 
   constructor() {
     const meta = inject(Meta);

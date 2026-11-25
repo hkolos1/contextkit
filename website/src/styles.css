@@ -32,11 +32,23 @@
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* Page container: fluid with a 20px gutter, capped at 90rem. */
+@utility wrap {
+  width: min(100% - 2.5rem, 90rem);
+  margin-inline: auto;
+}
+
 html {
   color-scheme: dark;
   background: var(--color-bg);
   color: var(--color-fg);
   -webkit-font-smoothing: antialiased;
+}
+/* Scale everything rem-based up a step on very wide screens. */
+@media (min-width: 1800px) {
+  html {
+    font-size: 112.5%;
+  }
 }
 body {
   margin: 0;

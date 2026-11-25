@@ -37,7 +37,7 @@ function label(text: string) {
   const texture = new THREE.CanvasTexture(c);
   texture.colorSpace = THREE.SRGBColorSpace;
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthWrite: false }));
-  sprite.scale.set(c.width / 260, c.height / 260, 1);
+  sprite.scale.set(c.width / 210, c.height / 210, 1);
   return sprite;
 }
 
@@ -72,7 +72,7 @@ export function constellationScene(canvas: HTMLCanvasElement, tools: string[]) {
   const page = new THREE.Group();
   page.rotation.set(-0.55, 0, 0);
   world.add(page);
-  const card = roundedRect(2.4, 1.6, 0.12);
+  const card = roundedRect(3.2, 2.1, 0.14);
   page.add(
     new THREE.Mesh(
       new THREE.ShapeGeometry(card, 12),
@@ -86,10 +86,11 @@ export function constellationScene(canvas: HTMLCanvasElement, tools: string[]) {
     ),
   );
   const bars: [number, number, number, string][] = [
-    [-0.55, 0.5, 0.9, "#24313a"],
-    [-0.35, 0.25, 1.3, "#1b2731"],
-    [-0.45, 0.05, 1.1, "#1b2731"],
-    [0.6, -0.4, 0.7, "#2dd4bf"],
+    [-0.75, 0.7, 1.2, "#24313a"],
+    [-0.45, 0.4, 1.8, "#1b2731"],
+    [-0.6, 0.15, 1.5, "#1b2731"],
+    [-0.7, -0.1, 1.3, "#1b2731"],
+    [0.85, -0.6, 0.9, "#2dd4bf"],
   ];
   for (const [x, y, w, color] of bars) {
     const bar = new THREE.Mesh(
@@ -106,13 +107,13 @@ export function constellationScene(canvas: HTMLCanvasElement, tools: string[]) {
     const group = new THREE.Group();
     const color = colors[i % colors.length];
     const core = new THREE.Mesh(
-      new THREE.SphereGeometry(0.07, 20, 12),
+      new THREE.SphereGeometry(0.09, 20, 12),
       new THREE.MeshBasicMaterial({ color: "#f2f6f8" }),
     );
     const halo = new THREE.Sprite(
       new THREE.SpriteMaterial({ map: glow, color, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }),
     );
-    halo.scale.setScalar(0.6);
+    halo.scale.setScalar(0.75);
     const tag = label(name);
     tag.position.y = 0.28;
     group.add(core, halo, tag);
@@ -127,8 +128,8 @@ export function constellationScene(canvas: HTMLCanvasElement, tools: string[]) {
       halo,
       link,
       flash: 0,
-      radius: 1.7 + (i / Math.max(1, tools.length - 1)) * 1.0,
-      height: -0.75 + (i / Math.max(1, tools.length - 1)) * 1.5,
+      radius: 2.3 + (i / Math.max(1, tools.length - 1)) * 1.2,
+      height: -1.0 + (i / Math.max(1, tools.length - 1)) * 2.0,
       speed: 0.05 + (i % 3) * 0.015,
       phase: (i / tools.length) * Math.PI * 2,
     };
@@ -138,7 +139,7 @@ export function constellationScene(canvas: HTMLCanvasElement, tools: string[]) {
   const agent = new THREE.Sprite(
     new THREE.SpriteMaterial({ map: glow, color: "#ffffff", transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }),
   );
-  agent.scale.setScalar(0.45);
+  agent.scale.setScalar(0.6);
   world.add(agent);
   const trail = new THREE.Line(
     new THREE.BufferGeometry().setFromPoints(new Array(24).fill(0).map(() => new THREE.Vector3())),
@@ -158,7 +159,12 @@ export function constellationScene(canvas: HTMLCanvasElement, tools: string[]) {
     renderer,
     (w, h) => {
       camera.aspect = w / h;
-      camera.position.set(0, 1.3, w < 640 ? 6.8 : 5.2);
+      // Fit the widest orbit plus its labels (≈5 units) and the scene's height
+      // (≈2.6 units) to the canvas, whatever its aspect ratio.
+      const v = THREE.MathUtils.degToRad(camera.fov) / 2;
+      const hz = Math.atan(Math.tan(v) * camera.aspect);
+      const distance = Math.max(5 / Math.tan(hz), 2.6 / Math.tan(v));
+      camera.position.set(0, distance * 0.22, distance);
       camera.lookAt(0, -0.1, 0);
       camera.updateProjectionMatrix();
     },
@@ -173,7 +179,7 @@ export function constellationScene(canvas: HTMLCanvasElement, tools: string[]) {
         const a = n.phase + s * n.speed * Math.PI;
         n.group.position.set(Math.cos(a) * n.radius, n.height + Math.sin(s + n.phase) * 0.08, Math.sin(a) * n.radius * 0.6);
         n.flash = Math.max(0, n.flash - 0.02);
-        n.halo.scale.setScalar(0.6 + n.flash * 0.9);
+        n.halo.scale.setScalar(0.75 + n.flash * 1.1);
         const pos = n.link.geometry.attributes["position"] as THREE.BufferAttribute;
         pos.setXYZ(1, n.group.position.x, n.group.position.y, n.group.position.z);
         pos.needsUpdate = true;
